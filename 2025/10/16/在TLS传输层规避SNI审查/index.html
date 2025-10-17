@@ -11,18 +11,31 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/archives/2025/07/">
+    <link rel="canonical" href="http://example.com/2025/10/16/在tls传输层规避sni审查/">
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/archives/2025/07/index.html">
+        <meta name="description" content="前言:www.高粱.top 不提供任何海外图片加速如果图片加载不出来请自行解决封面图片源：GitHub图片存放源：edgeone 研究背景:我们知道内陆连接境外服务器，可能会有：1、dns污染2、sni阻断3、tcp重置4、深度包检测DPI5、协议检测还有通过时序判断等最近看了一则报告,x加入cloudflare网络,说明服务器是在cloudflare所有ip服务器,我们知道cloudflare很">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在TLS传输层规避SNI审查实现直连">
+<meta property="og:url" content="http://example.com/2025/10/16/%E5%9C%A8TLS%E4%BC%A0%E8%BE%93%E5%B1%82%E8%A7%84%E9%81%BFSNI%E5%AE%A1%E6%9F%A5/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言:www.高粱.top 不提供任何海外图片加速如果图片加载不出来请自行解决封面图片源：GitHub图片存放源：edgeone 研究背景:我们知道内陆连接境外服务器，可能会有：1、dns污染2、sni阻断3、tcp重置4、深度包检测DPI5、协议检测还有通过时序判断等最近看了一则报告,x加入cloudflare网络,说明服务器是在cloudflare所有ip服务器,我们知道cloudflare很">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/images/ping%20x.png">
+<meta property="og:image" content="http://example.com/images/26d4cd1c44d8e3edc587aa65efb4f8a0.png">
+<meta property="og:image" content="http://example.com/images/b6cf25748eaa96f005b8caecc2cd5b1f.webp">
+<meta property="og:image" content="http://example.com/images/sni%20x.png">
+<meta property="og:image" content="http://example.com/images/grok%20kk.png">
+<meta property="og:image" content="http://example.com/images/IP.png">
+<meta property="og:image" content="http://example.com/images/qq_pic_merged_1760674875903.jpg">
+<meta property="og:image" content="http://example.com/images/Image_1760621301154.jpg">
+<meta property="article:published_time" content="2025-10-15T16:12:31.835Z">
+<meta property="article:modified_time" content="2025-10-17T04:35:33.205Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/ping%20x.png">
     
     
     <!--- Icon Part-->
@@ -34,7 +47,7 @@
     
     <title>
         
-            Archive: 2025/7 -
+            在TLS传输层规避SNI审查实现直连 -
         
         高粱NexT
     </title>
@@ -563,129 +576,207 @@
             <div class="main-content">
 
                 
-                    <div class="archive-container shadow-none hover:shadow-none sm:shadow-redefine sm:hover:shadow-redefine-hover">
-    
-<div class="archive-list-container">
-    
-        <section class="archive-item mb-spacing-unit last:mb-0">
-            <div class="archive-item-header flex flex-row items-center mb-2">
-                <span class="archive-year font-semibold text-3xl mr-2">2025</span>
-                <span class="archive-year-post-count text-xs md:text-sm font-bold rounded-small bg-third-background-color py-[2px] px-[10px] border border-border-color">3</span>
-            </div>
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
             
-            <ul class="article-list pl-0 md:pl-8 text-lg leading-[1.5]">
                 
-                    
-                    
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is="10-16">
-                    
-                    <a href="/2025/10/16/%E5%9C%A8TLS%E4%BC%A0%E8%BE%93%E5%B1%82%E8%A7%84%E9%81%BFSNI%E5%AE%A1%E6%9F%A5/" class="block overflow-hidden w-fit">
-                        <span class="article-title my-0.5 text-2xl">在TLS传输层规避SNI审查实现直连</span>
-                    </a>
-                    
                 
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is="07-13">
-                    
-                    <a href="/2025/07/13/mix2swindows11arm%E8%93%9D%E5%B1%8F%E4%BF%AE%E5%A4%8D%E6%96%B9%E6%A1%88/" class="block overflow-hidden w-fit">
-                        <span class="article-title my-0.5 text-2xl">mix2s windows11arm 蓝屏修复方案</span>
-                    </a>
-                    
+                <img src="https://s.secrss.com/anquanneican/5bcb1202f187332977b1da3b90afe917.png" alt="在TLS传输层规避SNI审查实现直连" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75">
                 
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is="05-05">
-                    
-                    <a href="/2025/05/05/%E9%AB%98%E7%B2%B1%E4%B8%80%E5%B9%B4%E6%9D%A5%E7%9A%84%E7%BB%8F%E5%8E%86/" class="block overflow-hidden w-fit">
-                        <span class="article-title my-0.5 text-2xl">高粱一年来的经历</span>
-                    </a>
-                    
-                
-                </li> <!-- Ensure the last item is properly closed -->
-            </ul>
-        </section>
-    
-        <section class="archive-item mb-spacing-unit last:mb-0">
-            <div class="archive-item-header flex flex-row items-center mb-2">
-                <span class="archive-year font-semibold text-3xl mr-2">2024</span>
-                <span class="archive-year-post-count text-xs md:text-sm font-bold rounded-small bg-third-background-color py-[2px] px-[10px] border border-border-color">5</span>
-            </div>
+                <div class="w-full flex items-center absolute bottom-0 justify-start">
+                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">在TLS传输层规避SNI审查实现直连</h1>
+                </div>
             
-            <ul class="article-list pl-0 md:pl-8 text-lg leading-[1.5]">
-                
-                    
-                    
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is="08-30">
-                    
-                    <a href="/2024/08/30/%E9%80%9A%E8%BF%87%E9%95%9C%E5%83%8F%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E5%8A%A0%E9%80%9F%E7%BD%91%E7%AB%99%E7%9A%84%E9%80%9F%E5%BA%A6/" class="block overflow-hidden w-fit">
-                        <span class="article-title my-0.5 text-2xl">通过Cloudflare镜像反向代理加速网站的速度</span>
-                    </a>
-                    
-                
-                    
-                    
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="/images/channels4_profile.jpg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">高粱NexT_Official</span>
                         
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is="08-16">
-                    
-                    <a href="/2024/08/16/%E5%8D%8E%E7%A1%95ROGb450f+5600G%E9%BB%91%E8%8B%B9%E6%9E%9CEFI%E6%96%B9%E6%A1%88/" class="block overflow-hidden w-fit">
-                        <span class="article-title my-0.5 text-2xl">华硕ROGb450f+5600G黑苹果EFI方案</span>
-                    </a>
-                    
-                
-                    
-                    
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv2</span>
                         
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is="08-15">
-                    
-                    <a href="/2024/08/15/%E5%85%B3%E4%BA%8E%E4%B8%AD%E5%9B%BD%E5%A4%A7%E9%99%86%E5%9C%B0%E5%8C%BA%E8%AE%BF%E9%97%AE%E6%85%A2%E7%9A%84%E9%97%AE%E9%A2%98/" class="block overflow-hidden w-fit">
-                        <span class="article-title my-0.5 text-2xl">bilibili视频测试</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is="08-10">
-                    
-                    <a href="/2024/08/10/%E6%88%91%E7%9A%84%E5%A5%BD%E6%9C%8B%E5%8F%8B%EF%BC%8C%E6%88%91%E4%BB%AC%E8%BF%98%E4%BC%9A%E5%86%8D%E8%A7%81%E5%90%97%E3%80%82%E3%80%82%E3%80%82%E3%80%82/" class="block overflow-hidden w-fit">
-                        <span class="article-title my-0.5 text-2xl">我的好朋友，我们还会再见吗。。。。</span>
-                    </a>
-                    
-                
-                    
-                    
-                        
-                            </li>
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is="07-14">
-                    
-                    <a href="/2024/07/14/%E7%BE%8E%E5%9B%BD%E6%80%BB%E7%BB%9F%E5%90%8D%E5%9C%BA%E9%9D%A2/" class="block overflow-hidden w-fit">
-                        <span class="article-title my-0.5 text-2xl">再次让美国强大</span>
-                    </a>
-                    
-                
-                </li> <!-- Ensure the last item is properly closed -->
-            </ul>
-        </section>
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-10-16 00:12:31</span>
+        <span class="mobile">2025-10-16 00:12:31</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-10-17 12:35:33</span>
+            <span class="mobile">2025-10-17 12:35:33</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
     
 </div>
 
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <div id="postchat_postcontent"><h2 id="前言"><a href="#前言" class="headerlink" title="前言:"></a>前言:</h2><p>www.高粱.top 不提供任何海外图片加速<br>如果图片加载不出来请自行解决<br>封面图片源：GitHub<br>图片存放源：edgeone</p>
+<h2 id="研究背景"><a href="#研究背景" class="headerlink" title="研究背景:"></a>研究背景:</h2><h4 id="我们知道内陆连接境外服务器，可能会有："><a href="#我们知道内陆连接境外服务器，可能会有：" class="headerlink" title="我们知道内陆连接境外服务器，可能会有："></a>我们知道内陆连接境外服务器，可能会有：</h4><h5 id="1、dns污染"><a href="#1、dns污染" class="headerlink" title="1、dns污染"></a>1、dns污染</h5><h5 id="2、sni阻断"><a href="#2、sni阻断" class="headerlink" title="2、sni阻断"></a>2、sni阻断</h5><h5 id="3、tcp重置"><a href="#3、tcp重置" class="headerlink" title="3、tcp重置"></a>3、tcp重置</h5><h5 id="4、深度包检测DPI"><a href="#4、深度包检测DPI" class="headerlink" title="4、深度包检测DPI"></a>4、深度包检测DPI</h5><h5 id="5、协议检测还有通过时序判断等"><a href="#5、协议检测还有通过时序判断等" class="headerlink" title="5、协议检测还有通过时序判断等"></a>5、协议检测还有通过时序判断等</h5><h5 id="最近看了一则报告-x加入cloudflare网络-说明服务器是在cloudflare所有ip服务器-我们知道cloudflare很多ip在中国是没有黑名单的，确实如此通过域名发送了ping包都可以ping通"><a href="#最近看了一则报告-x加入cloudflare网络-说明服务器是在cloudflare所有ip服务器-我们知道cloudflare很多ip在中国是没有黑名单的，确实如此通过域名发送了ping包都可以ping通" class="headerlink" title="最近看了一则报告,x加入cloudflare网络,说明服务器是在cloudflare所有ip服务器,我们知道cloudflare很多ip在中国是没有黑名单的，确实如此通过域名发送了ping包都可以ping通"></a>最近看了一则报告,x加入cloudflare网络,说明服务器是在cloudflare所有ip服务器,我们知道cloudflare很多ip在中国是没有黑名单的，确实如此通过域名发送了ping包都可以ping通</h5><img lazyload="" src="/images/loading.svg" data-src="\images\ping x.png" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly.">
+
+<h3 id="那么是不是说明我们可以直连x-？？？"><a href="#那么是不是说明我们可以直连x-？？？" class="headerlink" title="那么是不是说明我们可以直连x ？？？"></a>那么是不是说明我们可以直连x ？？？</h3><h2 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h2><h4 id="很明确我们现在最主要问题是sni问题"><a href="#很明确我们现在最主要问题是sni问题" class="headerlink" title="很明确我们现在最主要问题是sni问题"></a>很明确我们现在最主要问题是sni问题</h4><h5 id="先讲一下tls和sni是什么："><a href="#先讲一下tls和sni是什么：" class="headerlink" title="先讲一下tls和sni是什么："></a>先讲一下tls和sni是什么：</h5><h6 id="TLS："><a href="#TLS：" class="headerlink" title="TLS："></a>TLS：</h6><p>传输层安全性协议（TLS）[&amp;是一种设计用来保护网络通信安全的协议，它通过加密和身份验证来确保数据传输的安全性和完整性。TLS协议是在安全套接字层（SSL）的基础上发展而来的，目前最广泛使用的版本是TLS 1.2&amp;]，而TLS 1.3是最新的版本，提供了更高的安全性和效率。<br><img lazyload="" src="/images/loading.svg" data-src="\images\26d4cd1c44d8e3edc587aa65efb4f8a0.png" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."><br>TLS 在 OSI 模型 中位于 传输层和应用层之间</p>
+<h6 id="sni"><a href="#sni" class="headerlink" title="sni:"></a>sni:</h6><p>SNI 是 TLS 协议（以前称为 SSL 协议）的扩展<br>该协议在 HTTPS 中使用，它包含在 TLS/SSL 握手流程中<br>以确保客户端设备能够看到他们尝试访问的网站的正确 SSL 证书<br>在<strong>初始握手阶段</strong>，客户端向服务器发送“客户端问候”消息。此消息包含 SNI 字段，其中包含客户端想要连接的域信息的明文内容,这些明文内容会被检测，即使使用了doh也照样，典型就是tcp重置，或者是直接丢包让客户端一直处于加载中<br><img lazyload="" src="/images/loading.svg" data-src="\images\b6cf25748eaa96f005b8caecc2cd5b1f.webp" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."></p>
+<h5 id="那么有没有办法可以实现sni明文不被看见呢？"><a href="#那么有没有办法可以实现sni明文不被看见呢？" class="headerlink" title="那么有没有办法可以实现sni明文不被看见呢？"></a>那么有没有办法可以实现sni明文不被看见呢？</h5><p>1、用quic协议，虽然说quic协议实现了加密sni明文字段但是很有可能会被qos效果会非常不好</p>
+<p>2、sni伪装，之前看到了GitHub一个项目：<a class="link" target="_blank" rel="noopener" href="https://github.com/SpaceTimee/Sheas-Cealer">https://github.com/SpaceTimee/Sheas-Cealer <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br>原理：利用 Chromium 内核的启动参数特性伪造 SNI 拓展标记<br>具体：<a class="link" target="_blank" rel="noopener" href="https://nicebowl.fun/24_8">https://nicebowl.fun/24_8 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>3、tls分片，其实这个也不是什么新东西早在xray就实现了：<a class="link" target="_blank" rel="noopener" href="https://xtls.github.io/config/outbounds/freedom.html">https://xtls.github.io/config/outbounds/freedom.html <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br>在GitHub有通过tls分片来达到访问的项目：<a class="link" target="_blank" rel="noopener" href="https://github.com/maoist2009/TlsFragment">https://github.com/maoist2009/TlsFragment <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h5 id="这里我们来用tls分片"><a href="#这里我们来用tls分片" class="headerlink" title="这里我们来用tls分片"></a>这里我们来用tls分片</h5><p>这个软件原理：将TCP连接Client的第一个包（这个包一般来说是TLS ClientHello，一般应用层不会分片）在TLS层和TCP层分别进行分片，将sni拆入多个包以绕过。</p>
+<p>下载软件后，安装好之后，我们运行，打开设置代理<br>ip为：127.0.0.1<br>端口：2500<br>打开chrome你会发现x能够打开并且搜索地区是中国大陆<br><img lazyload="" src="/images/loading.svg" data-src="\images\sni x.png" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."></p>
+<img lazyload="" src="/images/loading.svg" data-src="\images\grok kk.png" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly.">
+
+<h2 id="杂碎"><a href="#杂碎" class="headerlink" title="杂碎"></a>杂碎</h2><h5 id="如果你觉得访问x很慢，可以试试CF优选ip工具测速"><a href="#如果你觉得访问x很慢，可以试试CF优选ip工具测速" class="headerlink" title="如果你觉得访问x很慢，可以试试CF优选ip工具测速"></a>如果你觉得访问x很慢，可以试试CF优选ip工具测速</h5><h6 id="此工具修改ip在py的config文件里"><a href="#此工具修改ip在py的config文件里" class="headerlink" title="此工具修改ip在py的config文件里"></a>此工具修改ip在py的config文件里</h6><h6 id="当然除了x你可以利用这来访问Google和YouTube还有别的网站也是有效的，前提你要找到对应服务器没在黑名单上的ip"><a href="#当然除了x你可以利用这来访问Google和YouTube还有别的网站也是有效的，前提你要找到对应服务器没在黑名单上的ip" class="headerlink" title="当然除了x你可以利用这来访问Google和YouTube还有别的网站也是有效的，前提你要找到对应服务器没在黑名单上的ip"></a>当然除了x你可以利用这来访问Google和YouTube还有别的网站也是有效的，前提你要找到对应服务器没在黑名单上的ip</h6><img lazyload="" src="/images/loading.svg" data-src="\images\IP.png" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly.">
+
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><h6 id="本文章纯技术探究，请勿用于违反行为！！！"><a href="#本文章纯技术探究，请勿用于违反行为！！！" class="headerlink" title="本文章纯技术探究，请勿用于违反行为！！！"></a>本文章纯技术探究，请勿用于违反行为！！！</h6><h3 id="如还有其他问题请在评论区发！"><a href="#如还有其他问题请在评论区发！" class="headerlink" title="如还有其他问题请在评论区发！"></a>如还有其他问题请在评论区发！</h3><h2 id="发癫专区："><a href="#发癫专区：" class="headerlink" title="发癫专区："></a>发癫专区：</h2><p>啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊<br>好想去看鹿乃10周年演出，本人来中国了，16号的上海听说非常好，这几天一堆事广州也去不了😭😭😭<br>下次演出我必来<br><img lazyload="" src="/images/loading.svg" data-src="\images\qq_pic_merged_1760674875903.jpg" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."><br><img lazyload="" src="/images/loading.svg" data-src="\images\Image_1760621301154.jpg" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."></p>
+<div style="position: relative; padding: 30% 45%;">
+<iframe style="position: absolute; width: 100%; height: 100%; left: 0; top: 0;" src="//player.bilibili.com/player.html?isOutside=true&amp;aid=115384631951924&amp;bvid=BV1PcWzzbEmA&amp;cid=33131725232&amp;p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+</div></div>
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> 在TLS传输层规避SNI审查实现直连</li>
+        <li><strong>Author:</strong> 高粱NexT_Official</li>
+        <li><strong>Created at
+                :</strong> 2025-10-16 00:12:31</li>
+        
+            <li>
+                <strong>Updated at
+                    :</strong> 2025-10-17 12:35:33
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://www.xn--n7zm13d.top/2025/10/16/在TLS传输层规避SNI审查/
+        </li>
+        <li>
+            <strong>
+                License:
+            </strong>
+            
+
+            
+                This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a>.
+            
+        </li>
+    </ul>
 </div>
+
+            </div>
+        
+
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next" rel="next" href="/2025/07/13/mix2swindows11arm%E8%93%9D%E5%B1%8F%E4%BF%AE%E5%A4%8D%E6%96%B9%E6%A1%88/">
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">mix2s windows11arm 蓝屏修复方案</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+                <div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div class="twikoo-container">
+        <script data-swup-reload-script="" src="https://cdn.staticfile.org/twikoo/1.6.10/twikoo.all.min.js"></script>
+        <div id="twikoo-comment"></div>
+        <script data-swup-reload-script="">
+            function loadTwikoo() {
+                twikoo.init({
+                    el: '#twikoo-comment',
+                    envId: 'https://radiant-boba-7f460a.netlify.app/.netlify/functions/twikoo',
+                });
+            }
+
+            if ('true') {
+                const loadTwikooTimeout = setTimeout(() => {
+                    loadTwikoo();
+                    clearTimeout(loadTwikooTimeout);
+                }, 1000);
+            } else {
+                window.addEventListener('DOMContentLoaded', loadTwikoo);
+            }
+        </script>
+    </div>
+
+
+        
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">在TLS传输层规避SNI审查实现直连</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A0%94%E7%A9%B6%E8%83%8C%E6%99%AF"><span class="nav-text">研究背景:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%82%A3%E4%B9%88%E6%98%AF%E4%B8%8D%E6%98%AF%E8%AF%B4%E6%98%8E%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E7%9B%B4%E8%BF%9Ex-%EF%BC%9F%EF%BC%9F%EF%BC%9F"><span class="nav-text">那么是不是说明我们可以直连x ？？？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%87%E7%A8%8B"><span class="nav-text">过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%82%E7%A2%8E"><span class="nav-text">杂碎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E"><span class="nav-text">最后</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E8%BF%98%E6%9C%89%E5%85%B6%E4%BB%96%E9%97%AE%E9%A2%98%E8%AF%B7%E5%9C%A8%E8%AF%84%E8%AE%BA%E5%8C%BA%E5%8F%91%EF%BC%81"><span class="nav-text">如还有其他问题请在评论区发！</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E7%99%AB%E4%B8%93%E5%8C%BA%EF%BC%9A"><span class="nav-text">发癫专区：</span></a></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
 
                 
 
@@ -772,6 +863,27 @@
         </div>
     </div>
 
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
     
 
     <div class="right-side-tools-container">
