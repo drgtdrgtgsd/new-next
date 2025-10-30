@@ -11,18 +11,34 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://example.com/tags/驱动/">
+    <link rel="canonical" href="http://example.com/2025/10/29/tls会话复用机制下的成功规避sni审核及异常重置深度剖析/">
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/tags/%E9%A9%B1%E5%8A%A8/index.html">
+        <meta name="description" content="前言:www.高粱.top 不提供任何海外图片加速如果图片加载不出来请自行解决封面图片源：ts2.tc.mm.bing.net图片存放源：edgeone 背景与研究动机:背景：在现代网络架构中，TLS（Transport Layer Security）协议作为保障数据传输机密性与完整性的核心机制，其交互过程的稳定性直接决定了应用层服务的可用性。本次研究聚焦于一个典型的 “访问时好时坏” 现象，通过">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TLS会话复用机制下的成功规避SNI审核及异常重置深度剖析——基于TLS与TCP协议层的抓包分析及SNI阻断研究">
+<meta property="og:url" content="http://example.com/2025/10/29/TLS%E4%BC%9A%E8%AF%9D%E5%A4%8D%E7%94%A8%E6%9C%BA%E5%88%B6%E4%B8%8B%E7%9A%84%E6%88%90%E5%8A%9F%E8%A7%84%E9%81%BFSNI%E5%AE%A1%E6%A0%B8%E5%8F%8A%E5%BC%82%E5%B8%B8%E9%87%8D%E7%BD%AE%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言:www.高粱.top 不提供任何海外图片加速如果图片加载不出来请自行解决封面图片源：ts2.tc.mm.bing.net图片存放源：edgeone 背景与研究动机:背景：在现代网络架构中，TLS（Transport Layer Security）协议作为保障数据传输机密性与完整性的核心机制，其交互过程的稳定性直接决定了应用层服务的可用性。本次研究聚焦于一个典型的 “访问时好时坏” 现象，通过">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/8136d60e-6b45-4ca6-9237-407c9dd6e33c.png">
+<meta property="og:image" content="http://example.com/images/bc15b718-38f5-4544-8fd5-1a43c4c9ec78.png">
+<meta property="og:image" content="http://example.com/images/17742457d403c9b8fe8ee95c61944bf3.png">
+<meta property="og:image" content="http://example.com/images/9d0a1c0819ada171ff1d79ede8cf19ba.png">
+<meta property="og:image" content="http://example.com/images/v2-6807f239f8bed250c31466604586d4c7_1440w.jpg">
+<meta property="og:image" content="http://example.com/images/v2-f7130881122df3953474a2bfc9e7ede1_r.jpg">
+<meta property="og:image" content="http://example.com/images/qq_pic_merged_1761843478606.jpg">
+<meta property="og:image" content="http://example.com/images/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-10-31%20011014.png">
+<meta property="article:published_time" content="2025-10-29T06:14:12.123Z">
+<meta property="article:modified_time" content="2025-10-30T17:30:33.017Z">
 <meta property="article:author" content="John Doe">
+<meta property="article:tag" content="网络">
+<meta property="article:tag" content="couldflare">
+<meta property="article:tag" content="tls">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/8136d60e-6b45-4ca6-9237-407c9dd6e33c.png">
     
     
     <!--- Icon Part-->
@@ -34,7 +50,7 @@
     
     <title>
         
-            标签: 驱动 -
+            TLS会话复用机制下的成功规避SNI审核及异常重置深度剖析——基于TLS与TCP协议层的抓包分析及SNI阻断研究 -
         
         高粱NexT
     </title>
@@ -601,47 +617,235 @@
             <div class="main-content">
 
                 
-                    <div class="tag-container">
-	<div class="tag-name">
-		<i class="fa-solid fa-tag"></i>&nbsp;驱动
-	</div>
-	<div class="tag-post-list">
-		
-<div class="archive-list-container">
-    
-        <section class="archive-item mb-spacing-unit last:mb-0">
-            <div class="archive-item-header flex flex-row items-center mb-2">
-                <span class="archive-year font-semibold text-3xl mr-2">2025</span>
-                <span class="archive-year-post-count text-xs md:text-sm font-bold rounded-small bg-third-background-color py-[2px] px-[10px] border border-border-color">1</span>
-            </div>
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
             
-            <ul class="article-list pl-0 md:pl-8 text-lg leading-[1.5]">
                 
-                    
-                    
-                         <!-- Close the previous LI if not the first item -->
-                        <li class="article-item space-y-2 px-6 pt-10 pb-2 text-xl relative border-l-2 border-border-color" date-is="10-15">
-                    
-                    <a href="/2025/10/15/mix2swindows11arm%E8%93%9D%E5%B1%8F%E4%BF%AE%E5%A4%8D%E6%96%B9%E6%A1%88/" class="block overflow-hidden w-fit">
-                        <span class="article-title my-0.5 text-2xl">mix2s windows11arm 蓝屏修复方案</span>
-                    </a>
-                    
                 
-                </li> <!-- Ensure the last item is properly closed -->
+                <img src="https://img.cdn1.vip/i/690249709cc7a_1761757552.webp" alt="TLS会话复用机制下的成功规避SNI审核及异常重置深度剖析——基于TLS与TCP协议层的抓包分析及SNI阻断研究" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75">
+                
+                <div class="w-full flex items-center absolute bottom-0 justify-start">
+                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">TLS会话复用机制下的成功规避SNI审核及异常重置深度剖析——基于TLS与TCP协议层的抓包分析及SNI阻断研究</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="/images/channels4_profile.jpg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">高粱NexT_Official</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">科技牢鹿包</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-10-29 14:14:12</span>
+        <span class="mobile">2025-10-29 14:14:12</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-10-31 01:30:33</span>
+            <span class="mobile">2025-10-31 01:30:33</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E7%BD%91%E7%BB%9C/">网络</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/couldflare/">couldflare</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/tls/">tls</a>&nbsp;
+                    </li>
+                
             </ul>
-        </section>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
     
 </div>
 
-	</div>
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <div id="postchat_postcontent"><h2 id="前言"><a href="#前言" class="headerlink" title="前言:"></a>前言:</h2><p>www.高粱.top 不提供任何海外图片加速<br>如果图片加载不出来请自行解决<br>封面图片源：ts2.tc.mm.bing.net<br>图片存放源：edgeone</p>
+<h2 id="背景与研究动机"><a href="#背景与研究动机" class="headerlink" title="背景与研究动机:"></a>背景与研究动机:</h2><h4 id="背景："><a href="#背景：" class="headerlink" title="背景："></a>背景：</h4><p>在现代网络架构中，TLS（Transport Layer Security）协议作为保障数据传输机密性与完整性的核心机制，其交互过程的稳定性直接决定了应用层服务的可用性。本次研究聚焦于一个典型的 “访问时好时坏” 现象，通过 Wireshark 抓包工具对成功与失败场景进行深度拆解，旨在从协议栈底层揭示TCP 连接管理、TLS 握手流程、CDN 会话复用策略及SNI（Server Name Indication）阻断机制之间的复杂关联，为网络运维、安全分析等领域提供可复用的排查方法论。</p>
+<h4 id="研究动机："><a href="#研究动机：" class="headerlink" title="研究动机："></a>研究动机：</h4><p>最近发现了一个神奇现象，在tls协议的网站加上在hosts加上对应ip能正常打开，研究半天，当时我以为浏览器是默认打开quic<br>直到我第二天凌  晨发现突然打不开，一直在已重置连接，这下意识到可能是sni阻断了<br>于是打开抓包工具复现情况，在tcp握手后tls第一次握手没有返回正常server hello而是出现了一大堆的tcp rst阻断<br><img lazyload="" src="/images/loading.svg" data-src="\images\8136d60e-6b45-4ca6-9237-407c9dd6e33c.png" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."><br><img lazyload="" src="/images/loading.svg" data-src="\images\bc15b718-38f5-4544-8fd5-1a43c4c9ec78.png" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."></p>
+<h3 id="关于异常重置深度剖析"><a href="#关于异常重置深度剖析" class="headerlink" title="关于异常重置深度剖析"></a>关于异常重置深度剖析</h3><h4 id="首先要知道为什么会重置"><a href="#首先要知道为什么会重置" class="headerlink" title="首先要知道为什么会重置"></a>首先要知道为什么会重置</h4><p>第一次连接网页首先tcp会进行3次握手<br>第一次握手：客户端发送SYN包请求连接<br>第二次握手：服务端回应SYN/ACK包，确认收到并提供初始序列号<br>第三次握手：客户端发送ACK包确认服务端的序列号，双方进入连接状态<br><img lazyload="" src="/images/loading.svg" data-src="\images\17742457d403c9b8fe8ee95c61944bf3.png" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."></p>
+<h5 id="然后到tls四次握手"><a href="#然后到tls四次握手" class="headerlink" title="然后到tls四次握手"></a>然后到tls四次握手</h5><p>第一次握手：客户端发出请求（Client Hello）<br>第二次握手：服务器回应（Server Hello）<br>第三次握手：客户端回应（客户端收到服务器的回应后，首先验证服务器证书）<br>第四次握手：服务器回应<br><img lazyload="" src="/images/loading.svg" data-src="\images\9d0a1c0819ada171ff1d79ede8cf19ba.png" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."><br><img lazyload="" src="/images/loading.svg" data-src="\images\v2-6807f239f8bed250c31466604586d4c7_1440w.jpg" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."><br>在tls第一次握手后，其中会发送Client Hello报文消息<br>跟服务器打招呼，其中主要携带：<br>客户端的TLS版本号（Version）、<br>客户端支持的加密套件列表（Cipher Suites）、<br>客户端生成的随机数（Client Random）<br>其中会有sni明文信息</p>
+<img lazyload="" src="/images/loading.svg" data-src="\images\v2-f7130881122df3953474a2bfc9e7ede1_r.jpg" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly.">
+
+<h6 id="就在sever-name里面"><a href="#就在sever-name里面" class="headerlink" title="就在sever_name里面"></a>就在sever_name里面</h6><img lazyload="" src="/images/loading.svg" data-src="\images\qq_pic_merged_1761843478606.jpg" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly.">
+
+<h6 id="数据经过防火墙，防火墙会检测sni明文名称，如果在黑名单，则会发送tcp-rst阻断，其表现为已重置连接"><a href="#数据经过防火墙，防火墙会检测sni明文名称，如果在黑名单，则会发送tcp-rst阻断，其表现为已重置连接" class="headerlink" title="数据经过防火墙，防火墙会检测sni明文名称，如果在黑名单，则会发送tcp rst阻断，其表现为已重置连接"></a>数据经过防火墙，防火墙会检测sni明文名称，如果在黑名单，则会发送tcp rst阻断，其表现为已重置连接</h6><h4 id="问题来了，在进行正常握手后，第二次不用特殊方式改hosts能直接进去，这是为什么呢？"><a href="#问题来了，在进行正常握手后，第二次不用特殊方式改hosts能直接进去，这是为什么呢？" class="headerlink" title="问题来了，在进行正常握手后，第二次不用特殊方式改hosts能直接进去，这是为什么呢？"></a>问题来了，在进行正常握手后，第二次不用特殊方式改hosts能直接进去，这是为什么呢？</h4><h5 id="那么我们来抓个包吧："><a href="#那么我们来抓个包吧：" class="headerlink" title="那么我们来抓个包吧："></a>那么我们来抓个包吧：</h5><h6 id="这是访问x的记录，前面用特殊办法访问了一次"><a href="#这是访问x的记录，前面用特殊办法访问了一次" class="headerlink" title="这是访问x的记录，前面用特殊办法访问了一次"></a>这是访问x的记录，前面用特殊办法访问了一次</h6><p>重新访问可以看见<br><img lazyload="" src="/images/loading.svg" data-src="\images\屏幕截图 2025-10-31 011014.png" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."></p>
+<p>开始并没有做tcp还有tls握手，直接开始传数据了<br>这也说明，tcp一直在连接，tls也没有sni校验<br>这就是tcp与tls会话复用，一般在应用层实现<br>经过查找ip，x的服务器竟然用的是couldflare的cdn，那么问题突然就通了<br>像couldflare这些cdn厂商，他们允许多应用/线程/实例 可以共用一个管道，就能达到复用的效果</p>
+<h6 id="所以就会出现无需tcp和sni再握手"><a href="#所以就会出现无需tcp和sni再握手" class="headerlink" title="所以就会出现无需tcp和sni再握手"></a>所以就会出现无需tcp和sni再握手</h6><h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><h6 id="本次研究通过对-“成功-失败”-两种场景的抓包分析，揭示了TLS-会话复用的时效性与SNI-阻断的靶向性是导致-“访问时好时坏”-的核心原因。从技术本质看，这是-CDN-性能优化策略（会话复用）与网络访问管控策略（SNI-阻断）在协议层的一次-“碰撞”。"><a href="#本次研究通过对-“成功-失败”-两种场景的抓包分析，揭示了TLS-会话复用的时效性与SNI-阻断的靶向性是导致-“访问时好时坏”-的核心原因。从技术本质看，这是-CDN-性能优化策略（会话复用）与网络访问管控策略（SNI-阻断）在协议层的一次-“碰撞”。" class="headerlink" title="本次研究通过对 “成功 / 失败” 两种场景的抓包分析，揭示了TLS 会话复用的时效性与SNI 阻断的靶向性是导致 “访问时好时坏” 的核心原因。从技术本质看，这是 CDN 性能优化策略（会话复用）与网络访问管控策略（SNI 阻断）在协议层的一次 “碰撞”。"></a>本次研究通过对 “成功 / 失败” 两种场景的抓包分析，揭示了TLS 会话复用的时效性与SNI 阻断的靶向性是导致 “访问时好时坏” 的核心原因。从技术本质看，这是 CDN 性能优化策略（会话复用）与网络访问管控策略（SNI 阻断）在协议层的一次 “碰撞”。</h6><h6 id="对网络工程师而言，此类分析不仅能快速定位问题根源，更能深入理解-TCP、TLS、CDN-等技术的协同与冲突逻辑；对普通用户而言，也能从-“网页能不能打开”-的表象，窥见网络世界底层协议的精妙博弈。未来，随着-QUIC-协议的普及（其内置的-0-RTT-握手也涉及会话复用），类似的-“协议层策略冲突”-可能会以新的形式出现，值得持续关注与研究。"><a href="#对网络工程师而言，此类分析不仅能快速定位问题根源，更能深入理解-TCP、TLS、CDN-等技术的协同与冲突逻辑；对普通用户而言，也能从-“网页能不能打开”-的表象，窥见网络世界底层协议的精妙博弈。未来，随着-QUIC-协议的普及（其内置的-0-RTT-握手也涉及会话复用），类似的-“协议层策略冲突”-可能会以新的形式出现，值得持续关注与研究。" class="headerlink" title="对网络工程师而言，此类分析不仅能快速定位问题根源，更能深入理解 TCP、TLS、CDN 等技术的协同与冲突逻辑；对普通用户而言，也能从 “网页能不能打开” 的表象，窥见网络世界底层协议的精妙博弈。未来，随着 QUIC 协议的普及（其内置的 0-RTT 握手也涉及会话复用），类似的 “协议层策略冲突” 可能会以新的形式出现，值得持续关注与研究。"></a>对网络工程师而言，此类分析不仅能快速定位问题根源，更能深入理解 TCP、TLS、CDN 等技术的协同与冲突逻辑；对普通用户而言，也能从 “网页能不能打开” 的表象，窥见网络世界底层协议的精妙博弈。未来，随着 QUIC 协议的普及（其内置的 0-RTT 握手也涉及会话复用），类似的 “协议层策略冲突” 可能会以新的形式出现，值得持续关注与研究。</h6><h6 id="但这也仅限于允许多应用-线程-实例-可以共用一个管道的才能达到复用效果"><a href="#但这也仅限于允许多应用-线程-实例-可以共用一个管道的才能达到复用效果" class="headerlink" title="但这也仅限于允许多应用/线程/实例 可以共用一个管道的才能达到复用效果"></a>但这也仅限于允许多应用/线程/实例 可以共用一个管道的才能达到复用效果</h6><h2 id="软件想法"><a href="#软件想法" class="headerlink" title="软件想法"></a>软件想法</h2><h6 id="既然正常握手一次，会有一段时间无需再次重复进行，那么在代理软件进行改造将可以复用的网站进行特殊管理，这样不仅速度快，而且对vps的消耗也会减少"><a href="#既然正常握手一次，会有一段时间无需再次重复进行，那么在代理软件进行改造将可以复用的网站进行特殊管理，这样不仅速度快，而且对vps的消耗也会减少" class="headerlink" title="既然正常握手一次，会有一段时间无需再次重复进行，那么在代理软件进行改造将可以复用的网站进行特殊管理，这样不仅速度快，而且对vps的消耗也会减少"></a>既然正常握手一次，会有一段时间无需再次重复进行，那么在代理软件进行改造将可以复用的网站进行特殊管理，这样不仅速度快，而且对vps的消耗也会减少</h6></div>
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> TLS会话复用机制下的成功规避SNI审核及异常重置深度剖析——基于TLS与TCP协议层的抓包分析及SNI阻断研究</li>
+        <li><strong>作者:</strong> 高粱NexT_Official</li>
+        <li><strong>创建于
+                :</strong> 2025-10-29 14:14:12</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2025-10-31 01:30:33
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://www.xn--n7zm13d.top/2025/10/29/TLS会话复用机制下的成功规避SNI审核及异常重置深度剖析/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> 进行许可。
+            
+        </li>
+    </ul>
 </div>
 
-<div class="tag-paginator">
-	<div class="paginator">
-    <span class="page-number current">1</span>
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/%E7%BD%91%E7%BB%9C/">#网络</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/couldflare/">#couldflare</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/tls/">#tls</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next" rel="next" href="/2025/10/22/aws%E5%B4%A9%E6%BA%83/">
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">杂谈aws崩溃</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+                <div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        评论
+    </div>
+    
+
+        
+            
+    <div class="twikoo-container">
+        <script data-swup-reload-script="" src="https://cdn.staticfile.org/twikoo/1.6.10/twikoo.all.min.js"></script>
+        <div id="twikoo-comment"></div>
+        <script data-swup-reload-script="">
+            function loadTwikoo() {
+                twikoo.init({
+                    el: '#twikoo-comment',
+                    envId: 'https://radiant-boba-7f460a.netlify.app/.netlify/functions/twikoo',
+                });
+            }
+
+            if ('true') {
+                const loadTwikooTimeout = setTimeout(() => {
+                    loadTwikoo();
+                    clearTimeout(loadTwikooTimeout);
+                }, 1000);
+            } else {
+                window.addEventListener('DOMContentLoaded', loadTwikoo);
+            }
+        </script>
+    </div>
+
+
+        
+        
+    
 </div>
 
+            </div>
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">TLS会话复用机制下的成功规避SNI审核及异常重置深度剖析——基于TLS与TCP协议层的抓包分析及SNI阻断研究</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF%E4%B8%8E%E7%A0%94%E7%A9%B6%E5%8A%A8%E6%9C%BA"><span class="nav-text">背景与研究动机:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E5%BC%82%E5%B8%B8%E9%87%8D%E7%BD%AE%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90"><span class="nav-text">关于异常重置深度剖析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E6%83%B3%E6%B3%95"><span class="nav-text">软件想法</span></a></li></ol>
+
+    </div>
 </div>
+        </div>
+    
+</div>
+
 
 
                 
@@ -729,6 +933,27 @@
         </div>
     </div>
 
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
     
 
     <div class="right-side-tools-container">
