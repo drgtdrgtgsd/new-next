@@ -1686,90 +1686,127 @@ GitHub - ChefKissInc/NootedRed: The AMD Vega iGPU support pat...
 <script src="/js/plugins/aplayer.js"></script>
 
 
-<!-- Draggable Fan Box -->
+<!-- Draggable Fan Box (iOS Style) -->
 <style>
     #draggable-ad {
         position: fixed;
         bottom: 20px;
         right: 20px;
-        width: 240px;
-        background-color: #fff;
-        border-radius: 12px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        width: 260px;
+        /* iOS Glassmorphism Background */
+        background-color: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 24px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
         z-index: 10000;
         overflow: hidden;
-        font-family: "Noto Sans SC", sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
         transition: transform 0.1s;
-        border: 1px solid rgba(0,0,0,0.1);
+        border: 1px solid rgba(255, 255, 255, 0.4);
     }
     
     /* Dark mode support */
     @media (prefers-color-scheme: dark) {
         #draggable-ad {
-            background-color: #2a2a2a;
-            border-color: #444;
-            color: #eee;
+            background-color: rgba(30, 30, 30, 0.60);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #fff;
         }
         #draggable-ad-header {
-            background-color: #333;
-            color: #eee;
-            border-bottom: 1px solid #444;
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            color: #eee !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
         }
         .control-label {
-            color: #ccc;
+            color: #eee !important;
+        }
+        /* Dark mode switch background */
+        .slider {
+            background-color: #3a3a3c !important;
+        }
+        /* Dark mode range track */
+        input[type=range] {
+            background: #3a3a3c !important; 
         }
     }
     
     #draggable-ad-header {
-        padding: 10px 12px;
-        background-color: #f7f7f7;
-        color: #555;
+        padding: 14px 18px;
+        /* Subtle header background */
+        background-color: rgba(255, 255, 255, 0.3);
+        color: #333;
         cursor: move;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 14px;
-        font-weight: bold;
-        border-bottom: 1px solid #eee;
+        font-size: 15px;
+        font-weight: 600;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         user-select: none;
     }
     
     #draggable-ad-close {
         cursor: pointer;
         font-size: 18px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background-color: rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        transition: all 0.2s;
         line-height: 1;
-        padding: 0 4px;
-        color: #999;
-        transition: color 0.2s;
+        padding-bottom: 2px; /* Visual centering adjustment */
+    }
+
+    @media (prefers-color-scheme: dark) {
+        #draggable-ad-close {
+            background-color: rgba(255,255,255,0.2);
+            color: #fff;
+        }
     }
     
     #draggable-ad-close:hover {
-        color: #ff4d4f;
+        background-color: #ff3b30;
+        color: white;
     }
     
     #draggable-ad-content {
-        padding: 20px 15px;
+        padding: 24px 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 15px;
+        gap: 20px;
     }
 
     /* Fan Styles */
     .fan-container {
-        width: 120px;
-        height: 120px;
+        width: 130px;
+        height: 130px;
         position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
+        /* Add a subtle container for the fan */
+        background: rgba(142, 142, 147, 0.12);
+        border-radius: 50%;
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
     }
 
     .fan-blades {
         width: 100%;
         height: 100%;
-        fill: #4facfe;
-        filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+        fill: #007AFF; /* iOS Blue */
+        filter: drop-shadow(0 4px 8px rgba(0, 122, 255, 0.25));
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .fan-blades {
+            fill: #0A84FF;
+        }
     }
 
     .fan-running {
@@ -1786,7 +1823,7 @@ GitHub - ChefKissInc/NootedRed: The AMD Vega iGPU support pat...
         width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 16px;
     }
 
     .control-row {
@@ -1796,17 +1833,18 @@ GitHub - ChefKissInc/NootedRed: The AMD Vega iGPU support pat...
     }
 
     .control-label {
-        font-size: 14px;
-        color: #666;
+        font-size: 15px;
+        color: #1c1c1e;
         font-weight: 500;
+        letter-spacing: -0.2px;
     }
 
-    /* Toggle Switch */
+    /* iOS Toggle Switch */
     .switch {
         position: relative;
         display: inline-block;
-        width: 44px;
-        height: 24px;
+        width: 51px;
+        height: 31px;
     }
 
     .switch input {
@@ -1822,67 +1860,89 @@ GitHub - ChefKissInc/NootedRed: The AMD Vega iGPU support pat...
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #ccc;
-        transition: .4s;
-        border-radius: 24px;
+        background-color: #e9e9ea;
+        transition: .3s;
+        border-radius: 31px;
     }
 
     .slider:before {
         position: absolute;
         content: "";
-        height: 18px;
-        width: 18px;
-        left: 3px;
-        bottom: 3px;
+        height: 27px;
+        width: 27px;
+        left: 2px;
+        bottom: 2px;
         background-color: white;
-        transition: .4s;
+        transition: .3s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy effect */
         border-radius: 50%;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.15), 0 1px 1px rgba(0,0,0,0.06);
     }
 
     input:checked + .slider {
-        background-color: #4facfe;
+        background-color: #34C759; /* iOS Green */
     }
 
     input:checked + .slider:before {
         transform: translateX(20px);
     }
 
-    /* Range Slider */
+    /* iOS Range Slider */
     input[type=range] {
+        -webkit-appearance: none;
         width: 120px;
+        height: 4px;
+        background: #e9e9ea;
+        border-radius: 2px;
+        outline: none;
+        margin: 0;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #fff;
         cursor: pointer;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.15), 0 1px 1px rgba(0,0,0,0.06), 0 0 0 0.5px rgba(0,0,0,0.04);
+        transition: transform 0.1s;
+    }
+
+    input[type=range]::-webkit-slider-thumb:active {
+        transform: scale(1.1);
     }
 </style>
 
 <div id="draggable-ad">
     <div id="draggable-ad-header">
-        <span>清凉小风扇w</span>
+        <span>智能控温</span>
         <span id="draggable-ad-close" title="关闭">×</span>
     </div>
     <div id="draggable-ad-content">
         <div class="fan-container">
             <svg class="fan-blades fan-running" id="fan-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <!-- Center Hub -->
-                <circle cx="50" cy="50" r="8" fill="#333" />
-                <!-- Blade 1 -->
-                <path d="M50 50 Q 75 20 80 10 Q 95 20 85 50 Z" transform="rotate(0, 50, 50)" />
-                <!-- Blade 2 -->
-                <path d="M50 50 Q 75 20 80 10 Q 95 20 85 50 Z" transform="rotate(120, 50, 50)" />
-                <!-- Blade 3 -->
-                <path d="M50 50 Q 75 20 80 10 Q 95 20 85 50 Z" transform="rotate(240, 50, 50)" />
+                <circle cx="50" cy="50" r="12" fill="currentColor" opacity="0.9" />
+                <!-- Modern Blade 1 -->
+                <path d="M50 50 C 50 50, 80 20, 90 35 C 95 45, 85 60, 50 50 Z" opacity="0.8" />
+                <!-- Modern Blade 2 -->
+                <path d="M50 50 C 50 50, 80 20, 90 35 C 95 45, 85 60, 50 50 Z" transform="rotate(120, 50, 50)" opacity="0.8" />
+                <!-- Modern Blade 3 -->
+                <path d="M50 50 C 50 50, 80 20, 90 35 C 95 45, 85 60, 50 50 Z" transform="rotate(240, 50, 50)" opacity="0.8" />
             </svg>
         </div>
         
         <div class="controls-container">
             <div class="control-row">
-                <span class="control-label">电源开关</span>
+                <span class="control-label">电源</span>
                 <label class="switch">
                     <input type="checkbox" id="fan-power" checked>
                     <span class="slider"></span>
                 </label>
             </div>
             <div class="control-row">
-                <span class="control-label">风速调节</span>
+                <span class="control-label">风速</span>
                 <input type="range" id="fan-speed" min="1" max="10" value="5" step="1">
             </div>
         </div>
@@ -1903,11 +1963,9 @@ GitHub - ChefKissInc/NootedRed: The AMD Vega iGPU support pat...
         function updateFanState() {
             if (powerSwitch.checked) {
                 fanSvg.style.animationPlayState = 'running';
-                // Speed logic: Value 1 (Slow) -> 10 (Fast)
-                // Duration logic: 2s (Slow) -> 0.2s (Fast)
-                // Formula: Duration = 2.2 - (speed * 0.2)
                 const speedVal = parseInt(speedSlider.value);
-                const duration = (2.2 - (speedVal * 0.2)).toFixed(2) + 's';
+                // Smoother speed transition
+                const duration = (2.0 - (speedVal * 0.18)).toFixed(2) + 's';
                 fanSvg.style.animationDuration = duration;
             } else {
                 fanSvg.style.animationPlayState = 'paused';
@@ -1929,8 +1987,26 @@ GitHub - ChefKissInc/NootedRed: The AMD Vega iGPU support pat...
         let xOffset = 0;
         let yOffset = 0;
 
-        closeBtn.addEventListener('click', function() {
-            adBox.style.display = 'none';
+        closeBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            // 移除拖拽事件以防动画期间误触
+            header.removeEventListener('mousedown', dragStart);
+            header.removeEventListener('touchstart', dragStart);
+            
+            // 启用平滑过渡动画
+            adBox.style.transition = "all 0.4s cubic-bezier(0.32, 0.72, 0, 1)";
+            adBox.style.transformOrigin = "center center";
+            
+            // 1. 缩小 (Scale down)
+            // 2. 渐隐 (Fade out)
+            // 3. 保持当前位置 (translate3d)
+            adBox.style.transform = `translate3d(${xOffset}px, ${yOffset}px, 0) scale(0.8)`;
+            adBox.style.opacity = "0";
+            
+            // 延迟移除元素
+            setTimeout(() => {
+                adBox.style.display = 'none';
+            }, 400);
         });
 
         header.addEventListener('mousedown', dragStart);
