@@ -368,7 +368,6 @@
                             
                         
                     
-                    
                 </div>
             </div>
         
@@ -1687,6 +1686,160 @@ GitHub - ChefKissInc/NootedRed: The AMD Vega iGPU support pat...
 <script src="/js/plugins/aplayer.js"></script>
 
 
+<!-- Draggable Ad Box -->
+<style>
+    #draggable-ad {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 300px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 10000;
+        overflow: hidden;
+        font-family: "Noto Sans SC", sans-serif;
+        transition: transform 0.1s;
+        border: 1px solid rgba(0,0,0,0.1);
+    }
+    
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+        #draggable-ad {
+            background-color: #2a2a2a;
+            border-color: #444;
+        }
+        #draggable-ad-header {
+            background-color: #333;
+            color: #eee;
+            border-bottom: 1px solid #444;
+        }
+    }
+    
+    #draggable-ad-header {
+        padding: 8px 12px;
+        background-color: #f7f7f7;
+        color: #555;
+        cursor: move;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        font-weight: bold;
+        border-bottom: 1px solid #eee;
+        user-select: none;
+    }
+    
+    #draggable-ad-close {
+        cursor: pointer;
+        font-size: 16px;
+        line-height: 1;
+        padding: 0 4px;
+        color: #999;
+        transition: color 0.2s;
+    }
+    
+    #draggable-ad-close:hover {
+        color: #ff4d4f;
+    }
+    
+    #draggable-ad-content {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    
+    #draggable-ad-content img {
+        width: 100%;
+        height: auto;
+        display: block;
+        pointer-events: none; /* Prevent image dragging interfering with box dragging */
+    }
+</style>
 
+<div id="draggable-ad">
+    <div id="draggable-ad-header">
+        <span>赞助商广告</span>
+        <span id="draggable-ad-close" title="关闭">×</span>
+    </div>
+    <div id="draggable-ad-content">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5yhRzIk9YxjvDUD-r1a8_CLBhsAdh8Yc8hw&s" alt="Ad">
+    </div>
+</div>
+
+<script>
+    (function() {
+        const adBox = document.getElementById('draggable-ad');
+        const header = document.getElementById('draggable-ad-header');
+        const closeBtn = document.getElementById('draggable-ad-close');
+        
+        let isDragging = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+
+        // Close Functionality
+        closeBtn.addEventListener('click', function() {
+            adBox.style.display = 'none';
+        });
+
+        // Mouse Events
+        header.addEventListener('mousedown', dragStart);
+        document.addEventListener('mouseup', dragEnd);
+        document.addEventListener('mousemove', drag);
+
+        // Touch Events (Mobile)
+        header.addEventListener('touchstart', dragStart, {passive: false});
+        document.addEventListener('touchend', dragEnd);
+        document.addEventListener('touchmove', drag, {passive: false});
+
+        function dragStart(e) {
+            if (e.type === "touchstart") {
+                initialX = e.touches[0].clientX - xOffset;
+                initialY = e.touches[0].clientY - yOffset;
+            } else {
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
+            }
+
+            if (e.target === header || e.target.parentNode === header) {
+                isDragging = true;
+            }
+        }
+
+        function dragEnd(e) {
+            initialX = currentX;
+            initialY = currentY;
+            isDragging = false;
+        }
+
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+                
+                if (e.type === "touchmove") {
+                    currentX = e.touches[0].clientX - initialX;
+                    currentY = e.touches[0].clientY - initialY;
+                } else {
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+                }
+
+                xOffset = currentX;
+                yOffset = currentY;
+
+                setTranslate(currentX, currentY, adBox);
+            }
+        }
+
+        function setTranslate(xPos, yPos, el) {
+            el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";
+        }
+    })();
+</script>
+<!-- End Draggable Ad Box -->
 
 </body></html>
