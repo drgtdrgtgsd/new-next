@@ -1686,16 +1686,16 @@ GitHub - ChefKissInc/NootedRed: The AMD Vega iGPU support pat...
 <script src="/js/plugins/aplayer.js"></script>
 
 
-<!-- Draggable Ad Box -->
+<!-- Draggable Fan Box -->
 <style>
     #draggable-ad {
         position: fixed;
         bottom: 20px;
         right: 20px;
-        width: 300px;
+        width: 240px;
         background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         z-index: 10000;
         overflow: hidden;
         font-family: "Noto Sans SC", sans-serif;
@@ -1708,23 +1708,27 @@ GitHub - ChefKissInc/NootedRed: The AMD Vega iGPU support pat...
         #draggable-ad {
             background-color: #2a2a2a;
             border-color: #444;
+            color: #eee;
         }
         #draggable-ad-header {
             background-color: #333;
             color: #eee;
             border-bottom: 1px solid #444;
         }
+        .control-label {
+            color: #ccc;
+        }
     }
     
     #draggable-ad-header {
-        padding: 8px 12px;
+        padding: 10px 12px;
         background-color: #f7f7f7;
         color: #555;
         cursor: move;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 12px;
+        font-size: 14px;
         font-weight: bold;
         border-bottom: 1px solid #eee;
         user-select: none;
@@ -1732,7 +1736,7 @@ GitHub - ChefKissInc/NootedRed: The AMD Vega iGPU support pat...
     
     #draggable-ad-close {
         cursor: pointer;
-        font-size: 16px;
+        font-size: 18px;
         line-height: 1;
         padding: 0 4px;
         color: #999;
@@ -1744,26 +1748,144 @@ GitHub - ChefKissInc/NootedRed: The AMD Vega iGPU support pat...
     }
     
     #draggable-ad-content {
-        width: 100%;
-        height: auto;
-        display: block;
+        padding: 20px 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
     }
-    
-    #draggable-ad-content img {
+
+    /* Fan Styles */
+    .fan-container {
+        width: 120px;
+        height: 120px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .fan-blades {
         width: 100%;
-        height: auto;
-        display: block;
-        pointer-events: none; /* Prevent image dragging interfering with box dragging */
+        height: 100%;
+        fill: #4facfe;
+        filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+    }
+
+    .fan-running {
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    /* Controls Styles */
+    .controls-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .control-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .control-label {
+        font-size: 14px;
+        color: #666;
+        font-weight: 500;
+    }
+
+    /* Toggle Switch */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 24px;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+
+    input:checked + .slider {
+        background-color: #4facfe;
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(20px);
+    }
+
+    /* Range Slider */
+    input[type=range] {
+        width: 120px;
+        cursor: pointer;
     }
 </style>
 
 <div id="draggable-ad">
     <div id="draggable-ad-header">
-        <span>赞助商广告</span>
+        <span>清凉小风扇w</span>
         <span id="draggable-ad-close" title="关闭">×</span>
     </div>
     <div id="draggable-ad-content">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5yhRzIk9YxjvDUD-r1a8_CLBhsAdh8Yc8hw&s" alt="Ad">
+        <div class="fan-container">
+            <svg class="fan-blades fan-running" id="fan-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Center Hub -->
+                <circle cx="50" cy="50" r="8" fill="#333" />
+                <!-- Blade 1 -->
+                <path d="M50 50 Q 75 20 80 10 Q 95 20 85 50 Z" transform="rotate(0, 50, 50)" />
+                <!-- Blade 2 -->
+                <path d="M50 50 Q 75 20 80 10 Q 95 20 85 50 Z" transform="rotate(120, 50, 50)" />
+                <!-- Blade 3 -->
+                <path d="M50 50 Q 75 20 80 10 Q 95 20 85 50 Z" transform="rotate(240, 50, 50)" />
+            </svg>
+        </div>
+        
+        <div class="controls-container">
+            <div class="control-row">
+                <span class="control-label">电源开关</span>
+                <label class="switch">
+                    <input type="checkbox" id="fan-power" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="control-row">
+                <span class="control-label">风速调节</span>
+                <input type="range" id="fan-speed" min="1" max="10" value="5" step="1">
+            </div>
+        </div>
     </div>
 </div>
 
@@ -1773,6 +1895,32 @@ GitHub - ChefKissInc/NootedRed: The AMD Vega iGPU support pat...
         const header = document.getElementById('draggable-ad-header');
         const closeBtn = document.getElementById('draggable-ad-close');
         
+        // Fan Logic
+        const fanSvg = document.getElementById('fan-svg');
+        const powerSwitch = document.getElementById('fan-power');
+        const speedSlider = document.getElementById('fan-speed');
+
+        function updateFanState() {
+            if (powerSwitch.checked) {
+                fanSvg.style.animationPlayState = 'running';
+                // Speed logic: Value 1 (Slow) -> 10 (Fast)
+                // Duration logic: 2s (Slow) -> 0.2s (Fast)
+                // Formula: Duration = 2.2 - (speed * 0.2)
+                const speedVal = parseInt(speedSlider.value);
+                const duration = (2.2 - (speedVal * 0.2)).toFixed(2) + 's';
+                fanSvg.style.animationDuration = duration;
+            } else {
+                fanSvg.style.animationPlayState = 'paused';
+            }
+        }
+
+        powerSwitch.addEventListener('change', updateFanState);
+        speedSlider.addEventListener('input', updateFanState);
+
+        // Initialize state
+        updateFanState();
+
+        // Draggable Logic
         let isDragging = false;
         let currentX;
         let currentY;
@@ -1781,17 +1929,14 @@ GitHub - ChefKissInc/NootedRed: The AMD Vega iGPU support pat...
         let xOffset = 0;
         let yOffset = 0;
 
-        // Close Functionality
         closeBtn.addEventListener('click', function() {
             adBox.style.display = 'none';
         });
 
-        // Mouse Events
         header.addEventListener('mousedown', dragStart);
         document.addEventListener('mouseup', dragEnd);
         document.addEventListener('mousemove', drag);
 
-        // Touch Events (Mobile)
         header.addEventListener('touchstart', dragStart, {passive: false});
         document.addEventListener('touchend', dragEnd);
         document.addEventListener('touchmove', drag, {passive: false});
@@ -1840,6 +1985,6 @@ GitHub - ChefKissInc/NootedRed: The AMD Vega iGPU support pat...
         }
     })();
 </script>
-<!-- End Draggable Ad Box -->
+<!-- End Draggable Fan Box -->
 
 </body></html>
