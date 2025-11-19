@@ -1704,6 +1704,9 @@ GitHub - ChefKissInc/NootedRed: The AMD Vega iGPU support pat...
         font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
         transition: transform 0.1s;
         border: 1px solid rgba(255, 255, 255, 0.4);
+        /* 初始状态确保可以被JS控制 */
+        opacity: 1;
+        transform: scale(1);
     }
     
     /* Dark mode support */
@@ -1987,26 +1990,55 @@ GitHub - ChefKissInc/NootedRed: The AMD Vega iGPU support pat...
         let xOffset = 0;
         let yOffset = 0;
 
+        // Close Animation Logic
         closeBtn.addEventListener('click', function(e) {
             e.stopPropagation();
-            // 移除拖拽事件以防动画期间误触
-            header.removeEventListener('mousedown', dragStart);
-            header.removeEventListener('touchstart', dragStart);
             
-            // 启用平滑过渡动画
-            adBox.style.transition = "all 0.4s cubic-bezier(0.32, 0.72, 0, 1)";
+            // iOS 26 Style Close: Smooth, bouncy shrink and fade
+            // Using a custom bezier for a "sucking" effect
+            adBox.style.transition = "all 0.5s cubic-bezier(0.32, 0.72, 0, 1)";
             adBox.style.transformOrigin = "center center";
             
-            // 1. 缩小 (Scale down)
-            // 2. 渐隐 (Fade out)
-            // 3. 保持当前位置 (translate3d)
-            adBox.style.transform = `translate3d(${xOffset}px, ${yOffset}px, 0) scale(0.8)`;
+            // Maintain position but scale down
+            adBox.style.transform = `translate3d(${xOffset}px, ${yOffset}px, 0) scale(0.7)`;
             adBox.style.opacity = "0";
-            
-            // 延迟移除元素
+            // adBox.style.filter = "blur(15px)"; // Optional: Add heavy blur for depth
+
+            // Remove from flow after animation
             setTimeout(() => {
-                adBox.style.display = 'none';
-            }, 400);
+                if (adBox.style.opacity === "0") { // Check in case it was re-opened quickly
+                    adBox.style.display = 'none';
+                }
+            }, 500);
+        });
+
+        // Open (Resurrect) Animation Logic - Double Click
+        document.addEventListener('dblclick', function(e) {
+            // Only trigger if currently hidden
+            if (adBox.style.display === 'none') {
+                // 1. Reset display so it exists in DOM layout
+                adBox.style.display = 'block';
+                
+                // 2. Reset transition to none to instantly set start state
+                adBox.style.transition = 'none';
+                adBox.style.transformOrigin = "center center";
+                
+                // 3. Set start state (Small, transparent) - same as where it closed
+                adBox.style.transform = `translate3d(${xOffset}px, ${yOffset}px, 0) scale(0.5)`;
+                adBox.style.opacity = '0';
+                
+                // 4. Force Browser Reflow (Critical for animation to trigger)
+                void adBox.offsetWidth;
+
+                // 5. Set End State with "iOS 26" Spring Animation
+                // Using a bouncy spring bezier: cubic-bezier(0.175, 0.885, 0.32, 1.275)
+                // Adjusted slightly for a more "fluid future" feel
+                adBox.style.transition = "all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)"; 
+                
+                adBox.style.transform = `translate3d(${xOffset}px, ${yOffset}px, 0) scale(1)`;
+                adBox.style.opacity = '1';
+                // adBox.style.filter = "blur(0px)";
+            }
         });
 
         header.addEventListener('mousedown', dragStart);
@@ -2028,6 +2060,8 @@ GitHub - ChefKissInc/NootedRed: The AMD Vega iGPU support pat...
 
             if (e.target === header || e.target.parentNode === header) {
                 isDragging = true;
+                // Remove transition during drag for instant response
+                adBox.style.transition = "none";
             }
         }
 
