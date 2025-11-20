@@ -271,36 +271,180 @@
         .home-banner-container {
             background: none !important;
         }
-        .home-article-item,
-        .sidebar-links,
-        .sidebar-content,
-        a.page-number,
-        a.extend,
-        .sidebar-links .links:hover,
-        .right-bottom-tools,
-        footer.footer {
-            background-color: var(--background-color-transparent-80) !important;
+        /* ... existing styles ... */
+        #subtitle {
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            font-weight: bold;
         }
-        .right-bottom-tools:hover,
-        a.page-number:hover,
-        a.extend:hover {
-            background-color: var(--primary-color) !important;
+
+        /* --- iOS 26 风格导航栏 (Navbar) --- */
+        .navbar-container {
+            background: transparent !important;
+            box-shadow: none !important;
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999; /* 确保最高层级 */
+            padding-top: 20px;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            pointer-events: none; /* 容器不挡鼠标 */
+            height: auto !important; 
+            min-height: 0 !important;
         }
-        .site-info,
-        .home-article-sticky-label {
-            background-color: var(--background-color-transparent-15) !important;
+
+        .navbar-content {
+            /* 核心 iOS 风格 */
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            
+            border-radius: 50px; /* 胶囊形状 */
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0,0,0,0.02);
+            
+            /* 布局与尺寸 */
+            width: 90% !important;
+            max-width: 1000px !important;
+            margin: 0 auto !important;
+            height: 64px !important;
+            padding: 0 24px !important;
+            
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            
+            pointer-events: auto; /* 内容需要点击 */
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
-        .home-article-sticky-label {
-            backdrop-filter: none !important;
+
+        /* 滚动后的导航栏状态 (更紧凑) */
+        .navbar-container.scrolled .navbar-content {
+            width: 95% !important;
+            max-width: 1100px !important;
+            height: 52px !important; /* 变矮 */
+            background: rgba(255, 255, 255, 0.85); /* 背景变实一点 */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+            margin-top: -10px !important;
+        }
+
+        /* 导航栏链接文字 */
+        .navbar-list .navbar-item > a {
+            color: #333 !important;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: background 0.3s;
+        }
+        
+        .navbar-list .navbar-item > a:hover {
+            background: rgba(0,0,0,0.05);
+            color: #000 !important;
+        }
+
+        /* Logo 样式 */
+        .logo-title h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #333 !important;
+            letter-spacing: -0.5px;
+        }
+
+        /* 深色模式适配 */
+        @media (prefers-color-scheme: dark) {
+            .navbar-content {
+                background: rgba(30, 30, 30, 0.60);
+                border-color: rgba(255, 255, 255, 0.1);
+            }
+            .navbar-container.scrolled .navbar-content {
+                background: rgba(30, 30, 30, 0.85);
+            }
+            .navbar-list .navbar-item > a {
+                color: #eee !important;
+            }
+            .navbar-list .navbar-item > a:hover {
+                background: rgba(255,255,255,0.1);
+                color: #fff !important;
+            }
+            .logo-title h1 {
+                color: #fff !important;
+            }
+        }
+
+        /* --- 新增：iOS 风格社交栏样式 --- */
+        .ios-glass-bar {
+            /* iOS 玻璃拟态背景 */
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 9999px; /* 全圆角 */
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            
+            /* 初始状态：隐形且下沉 */
+            opacity: 0;
+            transform: translateY(40px) scale(0.95);
+            
+            /* 入场动画：弹性向上 */
+            animation: ios-spring-entrance 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            animation-delay: 0.5s; /* 稍微延迟，等视频加载 */
+        }
+
+        /* 深色模式适配 */
+        @media (prefers-color-scheme: dark) {
+            .ios-glass-bar {
+                background: rgba(30, 30, 30, 0.60);
+                border-color: rgba(255, 255, 255, 0.1);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            }
+            /* 图标颜色适配 */
+            .social-contact-item i {
+                color: #eee;
+            }
+        }
+
+        /* 入场动画关键帧 */
+        @keyframes ios-spring-entrance {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* 图标样式 */
+        .social-contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* 点击弹跳动画 (Active State) */
+        .social-contact-item:active {
+            /* 放大 1.25 倍并向上浮动 10px，模拟弹起效果 */
+            transform: scale(1.25) translateY(-10px);
+        }
+        
+        /* 鼠标悬停微动效果 */
+        .social-contact-item:hover {
+            transform: translateY(-2px);
         }
     </style>
+    <!-- 视频背景容器 -->
     <div class="home-banner-background transition-fade fixed top-0 left-0 w-screen h-screen scale-125 sm:scale-110 box-border will-change-transform bg-cover">
-        <img src="/images/wallhaven-wqery6-light.webp" alt="home-banner-background" class="w-full h-full object-cover dark:hidden">
-        <img src="/images/wallhaven-wqery6-dark.webp" alt="home-banner-background" class="w-full h-full object-cover hidden dark:block">
+        <video autoplay loop muted playsinline class="w-full h-full object-cover">
+            <!-- 
+                修改为本地路径:
+                1. 请确保你的视频文件 (例如 background.mp4) 存放在网站的 /videos/ 目录下。
+                2. 在 Hexo 中，通常是放在 source/videos/background.mp4。
+            -->
+            <source src="/images/kano.mp4" type="video/mp4">
+            您的浏览器不支持视频标签。
+        </video>
+        <!-- 视频遮罩层，防止视频太亮影响文字阅读 (可选) -->
+        <div class="absolute top-0 left-0 w-full h-full bg-black/20"></div>
     </div>
-
-
-<div class="home-banner-container flex justify-center items-center transition-fade relative">
+<div class="home-banner-container flex justify-center items-center transition-fade relative z-10">
     
     <div class="content mt-8 flex flex-col justify-center items-center">
         <div class="description flex flex-col justify-center items-center w-screen font-medium text-center">
@@ -316,7 +460,9 @@
                 <div class="hidden p-3 bg-gray-300/50 dark:bg-gray-500/40 backdrop-blur-lg border border-white/20 dark:border-gray-500/30 group rounded-full cursor-pointer flex justify-center items-center aspect-square h-full shadow-redefine-flat hover:shadow-redefine-flat-hover transition-shadow" onclick="scrollToMain()">
                     <i class="fa-solid fa-arrow-down fa-fw fa-lg group-hover:translate-y-1 transition-transform"></i>
                 </div>
-                <div class="social-contacts px-6 py-3 bg-gray-300/50 dark:bg-gray-500/40 backdrop-blur-lg border border-white/20 dark:border-gray-500/30 shadow-redefine-flat rounded-full flex flex-row gap-3 items-center">
+                
+                <!-- 修改：应用新的 ios-glass-bar 类，移除旧的 Tailwind 背景样式 -->
+                <div class="social-contacts ios-glass-bar px-6 py-3 flex flex-row gap-5 items-center">
                     
                         
                             
@@ -1684,6 +1830,393 @@ GitHub - ChefKissInc/NootedRed: The AMD Vega iGPU support pat...
 
 
 <script src="/js/plugins/aplayer.js"></script>
+
+
+<!-- 修复视频背景滚动模糊 + 导航栏滚动效果 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const bannerVideo = document.querySelector('.home-banner-background video');
+        const navbarContainer = document.querySelector('.navbar-container');
+
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            const windowHeight = window.innerHeight;
+
+            // 1. 背景视频模糊处理
+            if (bannerVideo) {
+                let blurAmount = Math.min((scrollTop / windowHeight) * 20, 30);
+                bannerVideo.style.filter = `blur(${blurAmount}px)`;
+            }
+
+            // 2. 导航栏滚动交互 (iOS 26 效果)
+            if (navbarContainer) {
+                if (scrollTop > 50) {
+                    navbarContainer.classList.add('scrolled');
+                } else {
+                    navbarContainer.classList.remove('scrolled');
+                }
+            }
+        });
+    });
+</script>
+
+
+<!-- ========================================== -->
+<!--              iOS 风格分享组件              -->
+<!-- ========================================== -->
+<style>
+    /* 分享按钮 (左上角) */
+    #share-trigger-btn {
+        position: fixed;
+        top: 24px;
+        left: 24px;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 10002; /* 比导航栏高 */
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s;
+        color: #333;
+        font-size: 18px;
+    }
+
+    #share-trigger-btn:hover {
+        transform: scale(1.1);
+        background: rgba(255, 255, 255, 0.85);
+    }
+
+    #share-trigger-btn:active {
+        transform: scale(0.9);
+    }
+
+    /* 分享弹窗遮罩层 */
+    #share-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        z-index: 10003;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    /* 弹窗主体 (iOS 26 风格) */
+    #share-modal {
+        width: 320px;
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(40px) saturate(180%);
+        -webkit-backdrop-filter: blur(40px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 28px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        
+        /* 动画初始状态 */
+        transform: scale(0.8) translateY(20px);
+        opacity: 0;
+        transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1); /* iOS 弹簧曲线 */
+    }
+
+    /* 弹窗激活状态 */
+    #share-modal-overlay.active {
+        opacity: 1;
+    }
+    
+    #share-modal-overlay.active #share-modal {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+
+    /* 弹窗标题栏 */
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        padding-bottom: 12px;
+        margin-bottom: 4px;
+    }
+
+    .modal-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1c1c1e;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .modal-close {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #666;
+        font-size: 16px;
+        transition: all 0.2s;
+    }
+
+    .modal-close:hover {
+        background: rgba(0,0,0,0.1);
+        color: #000;
+    }
+
+    /* 分享图标网格 */
+    .share-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+    }
+
+    .share-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        text-decoration: none !important;
+        transition: transform 0.2s;
+    }
+
+    .share-item:hover {
+        transform: translateY(-3px);
+    }
+    
+    .share-item:active {
+        transform: scale(0.95);
+    }
+
+    .share-icon-box {
+        width: 56px;
+        height: 56px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        color: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: filter 0.2s;
+    }
+    
+    .share-item:hover .share-icon-box {
+        filter: brightness(1.1);
+    }
+
+    .share-label {
+        font-size: 12px;
+        color: #333;
+        font-weight: 500;
+    }
+
+    /* 品牌色 */
+    .bg-x { background: #000000; }
+    .bg-bili { background: #00aeec; }
+    .bg-weibo { background: #e6162d; }
+    .bg-email { background: linear-gradient(135deg, #34C759, #30B0C7); }
+
+    /* 深色模式适配 */
+    @media (prefers-color-scheme: dark) {
+        #share-trigger-btn {
+            background: rgba(40, 40, 40, 0.65);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #eee;
+        }
+        #share-modal {
+            background: rgba(30, 30, 30, 0.75);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        .modal-title { color: #fff; }
+        .modal-header { border-bottom-color: rgba(255,255,255,0.1); }
+        .share-label { color: #ddd; }
+        .modal-close { background: rgba(255,255,255,0.1); color: #ddd; }
+    }
+</style>
+
+<!-- 分享按钮 -->
+<div id="share-trigger-btn" title="分享">
+    <i class="fa-solid fa-share-nodes"></i>
+</div>
+
+<!-- 分享弹窗 -->
+<div id="share-modal-overlay">
+    <div id="share-modal">
+        <div class="modal-header">
+            <span class="modal-title">分享给谁</span>
+            <div class="modal-close" id="modal-close-btn">×</div>
+        </div>
+        <div class="share-grid">
+            <!-- X (Twitter) -->
+            <div class="share-item" onclick="shareTo('x')">
+                <div class="share-icon-box bg-x"><i class="fa-brands fa-x-twitter"></i></div>
+                <span class="share-label">X / 推特</span>
+            </div>
+            <!-- Bilibili -->
+            <div class="share-item" onclick="shareTo('bilibili')">
+                <div class="share-icon-box bg-bili"><i class="fa-brands fa-bilibili"></i></div>
+                <span class="share-label">Bilibili</span>
+            </div>
+            <!-- Weibo -->
+            <div class="share-item" onclick="shareTo('weibo')">
+                <div class="share-icon-box bg-weibo"><i class="fa-brands fa-weibo"></i></div>
+                <span class="share-label">微博</span>
+            </div>
+            <!-- Email -->
+            <div class="share-item" onclick="shareTo('email')">
+                <div class="share-icon-box bg-email"><i class="fa-solid fa-envelope"></i></div>
+                <span class="share-label">邮件</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const shareBtn = document.getElementById('share-trigger-btn');
+        const overlay = document.getElementById('share-modal-overlay');
+        const closeBtn = document.getElementById('modal-close-btn');
+        const shareUrl = "www.高粱.top"; // 分享链接
+        const fullUrl = "https://www.高粱.top";
+        
+        // 打开弹窗
+        shareBtn.addEventListener('click', () => {
+            overlay.style.display = 'flex';
+            // 强制重绘以触发 transition
+            requestAnimationFrame(() => {
+                overlay.classList.add('active');
+            });
+        });
+
+        // 关闭弹窗函数
+        function closeModal() {
+            overlay.classList.remove('active');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 300); // 等待动画结束
+        }
+
+        // 关闭事件绑定
+        closeBtn.addEventListener('click', closeModal);
+        
+        // 点击遮罩层关闭
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closeModal();
+        });
+
+        // ESC 键关闭
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && overlay.style.display === 'flex') {
+                closeModal();
+            }
+        });
+
+        // 分享逻辑
+        window.shareTo = function(platform) {
+            // 1. 复制链接到剪贴板
+            copyToClipboard(shareUrl);
+
+            // 2. 根据平台跳转
+            let targetUrl = "";
+            const text = "快来看看这个网站！"; // 默认分享文案
+
+            switch(platform) {
+                case 'x':
+                    targetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(fullUrl)}`;
+                    break;
+                case 'bilibili':
+                    // B站没有直接的外部Web分享API，通常跳转到动态首页让用户粘贴
+                    targetUrl = `https://t.bilibili.com/`;
+                    // 提示用户已复制
+                    showToast("链接已复制，请在B站动态中粘贴");
+                    break;
+                case 'weibo':
+                    targetUrl = `http://service.weibo.com/share/share.php?url=${encodeURIComponent(fullUrl)}&title=${encodeURIComponent(text)}`;
+                    break;
+                case 'email':
+                    targetUrl = `mailto:?subject=${encodeURIComponent(text)}&body=${encodeURIComponent(fullUrl)}`;
+                    break;
+            }
+
+            if (targetUrl) {
+                if (platform !== 'bilibili') {
+                     window.open(targetUrl, '_blank');
+                } else {
+                     // B站特殊处理，稍微延迟跳转给 Toast 展示时间
+                     setTimeout(() => window.open(targetUrl, '_blank'), 500);
+                }
+            }
+            
+            // 关闭弹窗
+            closeModal();
+        };
+
+        // 复制功能辅助函数
+        function copyToClipboard(text) {
+            // 优先使用现代 API
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text);
+            } else {
+                // 回退方案
+                let textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-9999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                } catch (err) {
+                    console.error('无法复制', err);
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+        
+        // 简单的 Toast 提示 (用于B站复制提示)
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.textContent = message;
+            toast.style.position = 'fixed';
+            toast.style.bottom = '50%';
+            toast.style.left = '50%';
+            toast.style.transform = 'translate(-50%, 50%)';
+            toast.style.background = 'rgba(0,0,0,0.7)';
+            toast.style.color = 'white';
+            toast.style.padding = '10px 20px';
+            toast.style.borderRadius = '8px';
+            toast.style.zIndex = '10005';
+            toast.style.fontSize = '14px';
+            toast.style.backdropFilter = 'blur(5px)';
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.transition = 'opacity 0.5s';
+                toast.style.opacity = '0';
+                setTimeout(() => document.body.removeChild(toast), 500);
+            }, 2000);
+        }
+    })();
+</script>
 
 
 <!-- Draggable Fan Box (iOS Style) -->
