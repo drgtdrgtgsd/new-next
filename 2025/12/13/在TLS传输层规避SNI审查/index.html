@@ -1,0 +1,1145 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="高粱NexT_Official">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2025/12/13/在tls传输层规避sni审查/">
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="前言:www.高粱.top 不提供任何海外图片加速如果图片加载不出来请自行解决封面图片源：GitHub图片存放源：edgeone 研究背景:我们知道内陆连接境外服务器，可能会有：1、dns污染2、sni阻断3、tcp重置4、深度包检测DPI5、协议检测还有通过时序判断等最近看了一则报告,x加入cloudflare网络,说明服务器是在cloudflare所有ip服务器,我们知道cloudflare很">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在TLS传输层规避SNI审查实现直连">
+<meta property="og:url" content="http://example.com/2025/12/13/%E5%9C%A8TLS%E4%BC%A0%E8%BE%93%E5%B1%82%E8%A7%84%E9%81%BFSNI%E5%AE%A1%E6%9F%A5/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言:www.高粱.top 不提供任何海外图片加速如果图片加载不出来请自行解决封面图片源：GitHub图片存放源：edgeone 研究背景:我们知道内陆连接境外服务器，可能会有：1、dns污染2、sni阻断3、tcp重置4、深度包检测DPI5、协议检测还有通过时序判断等最近看了一则报告,x加入cloudflare网络,说明服务器是在cloudflare所有ip服务器,我们知道cloudflare很">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/ping%20x.png">
+<meta property="og:image" content="http://example.com/images/26d4cd1c44d8e3edc587aa65efb4f8a0.png">
+<meta property="og:image" content="http://example.com/images/b6cf25748eaa96f005b8caecc2cd5b1f.webp">
+<meta property="og:image" content="http://example.com/images/sni%20x.png">
+<meta property="og:image" content="http://example.com/images/grok%20kk.png">
+<meta property="og:image" content="http://example.com/images/IP.png">
+<meta property="og:image" content="http://example.com/images/qq_pic_merged_1760674875903.jpg">
+<meta property="og:image" content="http://example.com/images/Image_1760621301154.jpg">
+<meta property="article:published_time" content="2025-12-13T08:48:09.256Z">
+<meta property="article:modified_time" content="2025-10-23T18:23:14.756Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="网络">
+<meta property="article:tag" content="couldflare">
+<meta property="article:tag" content="tls分片">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/ping%20x.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/channels4_profile.jpg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/channels4_profile.jpg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/channels4_profile.jpg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            在TLS传输层规避SNI审查实现直连 -
+        
+        高粱NexT
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+        
+            
+    
+            
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/assets/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    
+        
+<script src="/js/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"example.com","root":"/","language":"zh-CN"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":["科技牢鹿包"]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"高粱NexT的博客","subtitle":{"text":["一心一德,貫徹始終!!!","热烈庆祝博客一周年!!!"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"5.6rem","subtitle_size":"3.0rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"center","links":{"github":"https://github.com/drgtdrgtgsd","bilibili":"https://space.bilibili.com/660855130/dynamic","fa-brands fa-youtube":"https://www.youtube.com/@nxhs874","fa-brands fa-x":"https://x.com/nxhs3995","email":"nxhs3995@gmail.com"},"qrs":{"weixin":null}}},"plugins":{"postchat":null,"account":{"key":"70b649f150276f289d1025508f60c5f58a"},"summary":{"enableSummary":false,"postSelector":"#postchat_postcontent","title":"文章摘要","summaryStyle":"https://ai.tianli0.top/static/public/postChatUser_summary.min.css","postURL":"/^https?://[^/]+/[0-9]{4}/[0-9]{2}/[0-9]{2}/","blacklist":"","wordLimit":"1000","typingAnimate":false},"chat":{"enableAI":false,"backgroundColor":"#3e86f6","fill":"#FFFFFF","bottom":"16px","left":"16px","width":"44px","frameWidth":"375px","frameHeight":"600px","defaultInput":false,"upLoadWeb":false,"showInviteLink":false,"userTitle":"PostChat","userDesc":"如果你对网站的内容有任何疑问，可以来问我哦～","addButton":false},"feed":{"enable":"main"},"aplayer":{"enable":true,"type":"fixed","audios":[{"name":"国际歌","artist":"全世界无产者","url":"\\images\\国际歌（庄严版）.mp3","cover":"https://so1.360tres.com/t01ed5b37b35d68ebee.png","lrc":"\\images\\国际歌 - 中央乐团合唱队.lrc"},{"name":"KILIG","artist":"鹿乃","url":"\\images\\鹿乃 - KILIG.mp3","cover":"https://p2.music.126.net/6plPanbH775smCacofLoyg==/109951169214446127.jpg?param=130y130","lrc":"\\images\\KILIG.lrc"}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.4","navbar":{"auto_hide":true,"color":{"left":"#f78736","right":"#367df7","transparency":40},"width":{"home":"1200px","pages":"1000px"},"links":{"首页":{"icon":"fa-regular fa-house"},"English":{"path":"https://en.gaoliang.icu","icon":"fa-solid fa-earth-europe"},"日本語":{"path":"https://jp.gaoliang.icu","icon":"fa-solid fa-earth-europe"},"技术分类":{"icon":"fa-thin fa-microchip","submenus":{"网络/编程":"https://space.bilibili.com/660855130","机械/plc":"https://www.youtube.com/@nxhs874","刷机/系统":"https://x.com/nxhs3995"}},"关于":{"icon":"fa-regular fa-user","submenus":{"高粱NexT/bilibili":"https://space.bilibili.com/660855130","高粱NexT/YouTube":"https://www.youtube.com/@nxhs874","高粱NexT/x":"https://x.com/nxhs3995"}}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":"真理是不再会为了虚伪的羞耻而披上帷幔的，它知道自己的中的气力和光荣","show_on_mobile":true,"links":{"黑苹果报道":{"path":"/2024/08/16/华硕ROGb450f+5600G黑苹果EFI方案","icon":"fa-regular fa-archive"},"Kano":{"path":"https://space.bilibili.com/386900246?spm_id_from=333.337.0.0","icon":"fa-regular fa-folder"}}},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2024/7/14 6:45:14"};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+
+    <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        高粱NexT
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [40,0],
+                translateZ: 0,
+                opacity: [0,1],
+                filter: ['blur(5px)', 'blur(0px)'], // Starting from blurred to unblurred
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i,
+            }).add({
+                targets: '.ml13 .letter',
+                translateY: [0,-40],
+                opacity: [1,0],
+                filter: ['blur(0px)', 'blur(5px)'], // Ending from unblurred to blurred
+                easing: "easeInExpo",
+                duration: 1200,
+                delay: (el, i) => 100 + 30 * i,
+                complete: function() {
+                    hidePreloader(); // Call hidePreloader after the animation completes
+                }
+            });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                高粱NexT
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" href="/">
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" target="_blank" rel="noopener" href="https://en.gaoliang.icu">
+                                    <i class="fa-solid fa-earth-europe fa-fw"></i>
+                                    ENGLISH
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" target="_blank" rel="noopener" href="https://jp.gaoliang.icu">
+                                    <i class="fa-solid fa-earth-europe fa-fw"></i>
+                                    日本語
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" href="#" onclick="&quot;return" false;&#34;="">
+                                    <i class="fa-thin fa-microchip fa-fw"></i>
+                                    技术分类
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://space.bilibili.com/660855130">
+                                                    网络/编程
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://www.youtube.com/@nxhs874">
+                                                    机械/PLC
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://x.com/nxhs3995">
+                                                    刷机/系统
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="has-dropdown" href="#" onclick="&quot;return" false;&#34;="">
+                                    <i class="fa-regular fa-user fa-fw"></i>
+                                    关于
+                                    <i class="fa-solid fa-chevron-down fa-fw"></i>
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                                    <ul class="sub-menu">
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://space.bilibili.com/660855130">
+                                                    高粱NEXT/BILIBILI
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://www.youtube.com/@nxhs874">
+                                                    高粱NEXT/YOUTUBE
+                                                </a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a target="_blank" rel="noopener" href="https://x.com/nxhs3995">
+                                                    高粱NEXT/X
+                                                </a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full " href="/">
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full " target="_blank" rel="noopener" href="https://en.gaoliang.icu">
+                            <span>
+                                ENGLISH
+                            </span>
+                            
+                                <i class="fa-solid fa-earth-europe fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full " target="_blank" rel="noopener" href="https://jp.gaoliang.icu">
+                            <span>
+                                日本語
+                            </span>
+                            
+                                <i class="fa-solid fa-earth-europe fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full " navbar-data-toggle="submenu-技术分类">
+                            <span>
+                                技术分类
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-技术分类">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl" target="_blank" rel="noopener" href="https://space.bilibili.com/660855130">网络/编程</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl" target="_blank" rel="noopener" href="https://www.youtube.com/@nxhs874">机械/PLC</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl" target="_blank" rel="noopener" href="https://x.com/nxhs3995">刷机/系统</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item-sub text-base my-1.5 flex flex-col w-full">
+                        
+                        <div class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary cursor-pointer text-2xl font-semibold group border-b border-border-color hover:border-primary w-full " navbar-data-toggle="submenu-关于">
+                            <span>
+                                关于
+                            </span>
+                            
+                                <i class="fa-solid fa-chevron-right fa-sm fa-fw transition-all"></i>
+                            
+                        </div>
+                        
+
+                        
+                            <div class="flex-col items-start px-2 py-2 hidden" data-target="submenu-关于">
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl" target="_blank" rel="noopener" href="https://space.bilibili.com/660855130">高粱NEXT/BILIBILI</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl" target="_blank" rel="noopener" href="https://www.youtube.com/@nxhs874">高粱NEXT/YOUTUBE</a>
+                                    </div>
+                                
+                                    <div class="drawer-navbar-item text-base flex flex-col justify-center items-start hover:underline active:underline hover:underline-offset-1 rounded-3xl">
+                                        <a class=" text-third-text-color text-xl" target="_blank" rel="noopener" href="https://x.com/nxhs3995">高粱NEXT/X</a>
+                                    </div>
+                                
+                            </div>
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active" href="/2024/08/16/%E5%8D%8E%E7%A1%95ROGb450f+5600G%E9%BB%91%E8%8B%B9%E6%9E%9CEFI%E6%96%B9%E6%A1%88">
+                            <span>黑苹果报道</span>
+                            <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+                    
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active" target="_blank" rel="noopener" href="https://space.bilibili.com/386900246?spm_id_from=333.337.0.0">
+                            <span>Kano</span>
+                            <i class="fa-regular fa-folder fa-sm fa-fw"></i>
+                        </a>
+                    </li>
+                
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">16</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">10</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                
+                
+                <img src="https://s.secrss.com/anquanneican/5bcb1202f187332977b1da3b90afe917.png" alt="在TLS传输层规避SNI审查实现直连" class="w-full h-60 sm:h-72 md:h-80 object-cover sm:rounded-t-large dark:brightness-75">
+                
+                <div class="w-full flex items-center absolute bottom-0 justify-start">
+                    <h1 class="article-title-cover text-center mx-6 my-6 text-second-text-color bg-background-color-transparent px-4 py-3 text-3xl sm:text-4xl md:text-5xl font-semibold backdrop-blur-lg rounded-xl border border-border-color ">在TLS传输层规避SNI审查实现直连</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="/images/channels4_profile.jpg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">高粱NexT_Official</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">科技牢鹿包</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2025-12-13 16:48:09</span>
+        <span class="mobile">2025-12-13 16:48:09</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2025-10-24 02:23:14</span>
+            <span class="mobile">2025-10-24 02:23:14</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+    
+        <span class="article-tags article-meta-item">
+            <i class="fa-regular fa-tags"></i>&nbsp;
+            <ul>
+                
+                    <li>
+                        <a href="/tags/%E7%BD%91%E7%BB%9C/">网络</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/couldflare/">couldflare</a>&nbsp;
+                    </li>
+                
+                    <li>
+                        | <a href="/tags/tls%E5%88%86%E7%89%87/">tls分片</a>&nbsp;
+                    </li>
+                
+            </ul>
+        </span>
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <div id="postchat_postcontent"><h2 id="前言"><a href="#前言" class="headerlink" title="前言:"></a>前言:</h2><p>www.高粱.top 不提供任何海外图片加速<br>如果图片加载不出来请自行解决<br>封面图片源：GitHub<br>图片存放源：edgeone</p>
+<h2 id="研究背景"><a href="#研究背景" class="headerlink" title="研究背景:"></a>研究背景:</h2><h4 id="我们知道内陆连接境外服务器，可能会有："><a href="#我们知道内陆连接境外服务器，可能会有：" class="headerlink" title="我们知道内陆连接境外服务器，可能会有："></a>我们知道内陆连接境外服务器，可能会有：</h4><h5 id="1、dns污染"><a href="#1、dns污染" class="headerlink" title="1、dns污染"></a>1、dns污染</h5><h5 id="2、sni阻断"><a href="#2、sni阻断" class="headerlink" title="2、sni阻断"></a>2、sni阻断</h5><h5 id="3、tcp重置"><a href="#3、tcp重置" class="headerlink" title="3、tcp重置"></a>3、tcp重置</h5><h5 id="4、深度包检测DPI"><a href="#4、深度包检测DPI" class="headerlink" title="4、深度包检测DPI"></a>4、深度包检测DPI</h5><h5 id="5、协议检测还有通过时序判断等"><a href="#5、协议检测还有通过时序判断等" class="headerlink" title="5、协议检测还有通过时序判断等"></a>5、协议检测还有通过时序判断等</h5><h5 id="最近看了一则报告-x加入cloudflare网络-说明服务器是在cloudflare所有ip服务器-我们知道cloudflare很多ip在中国是没有黑名单的，确实如此通过域名发送了ping包都可以ping通"><a href="#最近看了一则报告-x加入cloudflare网络-说明服务器是在cloudflare所有ip服务器-我们知道cloudflare很多ip在中国是没有黑名单的，确实如此通过域名发送了ping包都可以ping通" class="headerlink" title="最近看了一则报告,x加入cloudflare网络,说明服务器是在cloudflare所有ip服务器,我们知道cloudflare很多ip在中国是没有黑名单的，确实如此通过域名发送了ping包都可以ping通"></a>最近看了一则报告,x加入cloudflare网络,说明服务器是在cloudflare所有ip服务器,我们知道cloudflare很多ip在中国是没有黑名单的，确实如此通过域名发送了ping包都可以ping通</h5><img lazyload="" src="/images/loading.svg" data-src="\images\ping x.png" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly.">
+
+<h3 id="那么是不是说明我们可以直连x-？？？"><a href="#那么是不是说明我们可以直连x-？？？" class="headerlink" title="那么是不是说明我们可以直连x ？？？"></a>那么是不是说明我们可以直连x ？？？</h3><h2 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h2><h4 id="很明确我们现在最主要问题是sni问题"><a href="#很明确我们现在最主要问题是sni问题" class="headerlink" title="很明确我们现在最主要问题是sni问题"></a>很明确我们现在最主要问题是sni问题</h4><h5 id="先讲一下tls和sni是什么："><a href="#先讲一下tls和sni是什么：" class="headerlink" title="先讲一下tls和sni是什么："></a>先讲一下tls和sni是什么：</h5><h6 id="TLS："><a href="#TLS：" class="headerlink" title="TLS："></a>TLS：</h6><p>传输层安全性协议（TLS）[&amp;是一种设计用来保护网络通信安全的协议，它通过加密和身份验证来确保数据传输的安全性和完整性。TLS协议是在安全套接字层（SSL）的基础上发展而来的，目前最广泛使用的版本是TLS 1.2&amp;]，而TLS 1.3是最新的版本，提供了更高的安全性和效率。<br><img lazyload="" src="/images/loading.svg" data-src="\images\26d4cd1c44d8e3edc587aa65efb4f8a0.png" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."><br>TLS 在 OSI 模型 中位于 传输层和应用层之间</p>
+<h6 id="sni"><a href="#sni" class="headerlink" title="sni:"></a>sni:</h6><p>SNI 是 TLS 协议（以前称为 SSL 协议）的扩展<br>该协议在 HTTPS 中使用，它包含在 TLS/SSL 握手流程中<br>以确保客户端设备能够看到他们尝试访问的网站的正确 SSL 证书<br>在<strong>初始握手阶段</strong>，客户端向服务器发送“客户端问候”消息。此消息包含 SNI 字段，其中包含客户端想要连接的域信息的明文内容,这些明文内容会被检测，即使使用了doh也照样，典型就是tcp重置，或者是直接丢包让客户端一直处于加载中<br><img lazyload="" src="/images/loading.svg" data-src="\images\b6cf25748eaa96f005b8caecc2cd5b1f.webp" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."></p>
+<h5 id="那么有没有办法可以实现sni明文不被看见呢？"><a href="#那么有没有办法可以实现sni明文不被看见呢？" class="headerlink" title="那么有没有办法可以实现sni明文不被看见呢？"></a>那么有没有办法可以实现sni明文不被看见呢？</h5><p>1、用quic协议，虽然说quic协议实现了加密sni明文字段但是很有可能会被qos效果会非常不好</p>
+<p>2、sni伪装，之前看到了GitHub一个项目：<a class="link" target="_blank" rel="noopener" href="https://github.com/SpaceTimee/Sheas-Cealer">https://github.com/SpaceTimee/Sheas-Cealer <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br>原理：利用 Chromium 内核的启动参数特性伪造 SNI 拓展标记<br>具体：<a class="link" target="_blank" rel="noopener" href="https://nicebowl.fun/24_8">https://nicebowl.fun/24_8 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>3、tls分片，其实这个也不是什么新东西早在xray就实现了：<a class="link" target="_blank" rel="noopener" href="https://xtls.github.io/config/outbounds/freedom.html">https://xtls.github.io/config/outbounds/freedom.html <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br>在GitHub有通过tls分片来达到访问的项目：<a class="link" target="_blank" rel="noopener" href="https://github.com/maoist2009/TlsFragment">https://github.com/maoist2009/TlsFragment <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h5 id="这里我们来用tls分片"><a href="#这里我们来用tls分片" class="headerlink" title="这里我们来用tls分片"></a>这里我们来用tls分片</h5><p>这个软件原理：将TCP连接Client的第一个包（这个包一般来说是TLS ClientHello，一般应用层不会分片）在TLS层和TCP层分别进行分片，将sni拆入多个包以绕过。</p>
+<p>下载软件后，安装好之后，我们运行，打开设置代理<br>ip为：127.0.0.1<br>端口：2500<br>打开chrome你会发现x能够打开并且搜索地区是中国大陆<br><img lazyload="" src="/images/loading.svg" data-src="\images\sni x.png" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."></p>
+<img lazyload="" src="/images/loading.svg" data-src="\images\grok kk.png" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly.">
+
+<h2 id="杂碎"><a href="#杂碎" class="headerlink" title="杂碎"></a>杂碎</h2><h5 id="如果你觉得访问x很慢，可以试试CF优选ip工具测速"><a href="#如果你觉得访问x很慢，可以试试CF优选ip工具测速" class="headerlink" title="如果你觉得访问x很慢，可以试试CF优选ip工具测速"></a>如果你觉得访问x很慢，可以试试CF优选ip工具测速</h5><h6 id="此工具修改ip在py的config文件里"><a href="#此工具修改ip在py的config文件里" class="headerlink" title="此工具修改ip在py的config文件里"></a>此工具修改ip在py的config文件里</h6><h6 id="当然除了x你可以利用这来访问Google和YouTube还有别的网站也是有效的，前提你要找到对应服务器没在黑名单上的ip"><a href="#当然除了x你可以利用这来访问Google和YouTube还有别的网站也是有效的，前提你要找到对应服务器没在黑名单上的ip" class="headerlink" title="当然除了x你可以利用这来访问Google和YouTube还有别的网站也是有效的，前提你要找到对应服务器没在黑名单上的ip"></a>当然除了x你可以利用这来访问Google和YouTube还有别的网站也是有效的，前提你要找到对应服务器没在黑名单上的ip</h6><img lazyload="" src="/images/loading.svg" data-src="\images\IP.png" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly.">
+
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><h6 id="本文章纯技术探究，请勿用于违反行为！！！"><a href="#本文章纯技术探究，请勿用于违反行为！！！" class="headerlink" title="本文章纯技术探究，请勿用于违反行为！！！"></a>本文章纯技术探究，请勿用于违反行为！！！</h6><h3 id="如还有其他问题请在评论区发！"><a href="#如还有其他问题请在评论区发！" class="headerlink" title="如还有其他问题请在评论区发！"></a>如还有其他问题请在评论区发！</h3><h2 id="发癫专区："><a href="#发癫专区：" class="headerlink" title="发癫专区："></a>发癫专区：</h2><p>啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊<br>好想去看鹿乃10周年演出，本人来中国了，16号的上海听说非常好，这几天一堆事广州也去不了😭😭😭<br>下次演出我必来<br><img lazyload="" src="/images/loading.svg" data-src="\images\qq_pic_merged_1760674875903.jpg" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."><br><img lazyload="" src="/images/loading.svg" data-src="\images\Image_1760621301154.jpg" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."></p>
+<div style="position: relative; padding: 30% 45%;">
+<iframe style="position: absolute; width: 100%; height: 100%; left: 0; top: 0;" src="//player.bilibili.com/player.html?isOutside=true&amp;aid=115384631951924&amp;bvid=BV1PcWzzbEmA&amp;cid=33131725232&amp;p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+</div></div>
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 在TLS传输层规避SNI审查实现直连</li>
+        <li><strong>作者:</strong> 高粱NexT_Official</li>
+        <li><strong>创建于
+                :</strong> 2025-12-13 16:48:09</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2025-10-24 02:23:14
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://www.xn--n7zm13d.top/2025/12/13/在TLS传输层规避SNI审查/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> 进行许可。
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+            <ul class="post-tags-box text-lg mt-1.5 flex-wrap justify-center flex md:hidden">
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/%E7%BD%91%E7%BB%9C/">#网络</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/couldflare/">#couldflare</a>&nbsp;
+                    </li>
+                
+                    <li class="tag-item mx-0.5">
+                        <a href="/tags/tls%E5%88%86%E7%89%87/">#tls分片</a>&nbsp;
+                    </li>
+                
+            </ul>
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="prev" rel="prev" href="/2025/12/13/%E5%85%B3%E4%BA%8E%E4%B8%AD%E5%9B%BD%E5%A4%A7%E9%99%86%E5%9C%B0%E5%8C%BA%E8%AE%BF%E9%97%AE%E6%85%A2%E7%9A%84%E9%97%AE%E9%A2%98/">
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">bilibili视频测试</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next" rel="next" href="/2025/12/13/%E6%88%91%E7%9A%84%E5%A5%BD%E6%9C%8B%E5%8F%8B%EF%BC%8C%E6%88%91%E4%BB%AC%E8%BF%98%E4%BC%9A%E5%86%8D%E8%A7%81%E5%90%97%E3%80%82%E3%80%82%E3%80%82%E3%80%82/">
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">我的好朋友，我们还会再见吗。。。。</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+                <div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        评论
+    </div>
+    
+
+        
+            
+    <div class="twikoo-container">
+        <script data-swup-reload-script="" src="https://cdn.staticfile.org/twikoo/1.6.10/twikoo.all.min.js"></script>
+        <div id="twikoo-comment"></div>
+        <script data-swup-reload-script="">
+            function loadTwikoo() {
+                twikoo.init({
+                    el: '#twikoo-comment',
+                    envId: 'https://radiant-boba-7f460a.netlify.app/.netlify/functions/twikoo',
+                });
+            }
+
+            if ('true') {
+                const loadTwikooTimeout = setTimeout(() => {
+                    loadTwikoo();
+                    clearTimeout(loadTwikooTimeout);
+                }, 1000);
+            } else {
+                window.addEventListener('DOMContentLoaded', loadTwikoo);
+            }
+        </script>
+    </div>
+
+
+        
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">在TLS传输层规避SNI审查实现直连</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A0%94%E7%A9%B6%E8%83%8C%E6%99%AF"><span class="nav-text">研究背景:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%82%A3%E4%B9%88%E6%98%AF%E4%B8%8D%E6%98%AF%E8%AF%B4%E6%98%8E%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E7%9B%B4%E8%BF%9Ex-%EF%BC%9F%EF%BC%9F%EF%BC%9F"><span class="nav-text">那么是不是说明我们可以直连x ？？？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%87%E7%A8%8B"><span class="nav-text">过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%82%E7%A2%8E"><span class="nav-text">杂碎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E"><span class="nav-text">最后</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E8%BF%98%E6%9C%89%E5%85%B6%E4%BB%96%E9%97%AE%E9%A2%98%E8%AF%B7%E5%9C%A8%E8%AF%84%E8%AE%BA%E5%8C%BA%E5%8F%91%EF%BC%81"><span class="nav-text">如还有其他问题请在评论区发！</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E7%99%AB%E4%B8%93%E5%8C%BA%EF%BC%9A"><span class="nav-text">发癫专区：</span></a></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            ©
+            
+              <span>2024</span>
+              -
+            
+            2026&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">高粱NexT_Official</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共 10 篇文章
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script="" src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由高粱NexT©提供 <!--?xml version="1.0" encoding="utf-8"?--><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"></path></svg><a target="_blank" class="text-base" href="https://photo.gaoliang.icu">图库</a> </span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">原作者修改Redefine v2.6.4</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days"></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script="">
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+            
+                
+        
+                
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="/js/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script="">
+    
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+    <div id="aplayer"></div>
+
+<script src="/js/libs/APlayer.min.js"></script>
+
+
+<script src="/js/plugins/aplayer.js"></script>
+
+
+
+
+</body></html>
