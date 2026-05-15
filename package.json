@@ -5,6 +5,7 @@
   "scripts": {
     "build": "hexo generate",
     "clean": "hexo clean",
+    "postinstall": "hexo generate",
     "deploy": "hexo generate && wrangler deploy",
     "server": "hexo server"
   },
