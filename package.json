@@ -19,7 +19,7 @@
     "hexo-generator-index": "^4.0.0",
     "hexo-generator-tag": "^2.0.0",
     "hexo-i18n": "^2.0.0",
-    "hexo-next-twikoo": "^1.0.0",
+    "hexo-next-twikoo": "^1.0.3",
     "hexo-plugin-postchat": "^1.0.0",
     "hexo-renderer-ejs": "^2.0.0",
     "hexo-renderer-marked": "^6.3.0",
