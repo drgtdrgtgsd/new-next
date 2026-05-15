@@ -7,5 +7,4 @@ directory = "./public"
 [observability]
 enabled = true
 
-[compatibility_flags]
-nodejs_compat = true
+compatibility_flags = [ "nodejs_compat" ]
