@@ -409,8 +409,7 @@ inject:
   enable: true
   # Inject custom head html code
   head: 
-    -
-    -
+    - "<style>@media (min-width: 768px) { .home-banner-container .content { transform: translateY(-20vh) !important; } }</style>"
   # Inject custom footer html code
   footer: 
     -
