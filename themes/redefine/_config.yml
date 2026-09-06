@@ -409,10 +409,10 @@ inject:
   enable: true
   # Inject custom head html code
   head: 
-    - "<style>@media (min-width: 768px) { .home-banner-container .content { display: none !important; } .home-banner-container .social-contacts { display: none !important; } .my-custom-footer-links { display: flex !important; } } @media (max-width: 767px) { .my-custom-footer-links { display: none !important; } }</style>"
+    - "<style>@media (min-width: 768px) { .home-banner-container .content { display: none !important; } .home-banner-container .social-contacts { display: none !important; } .my-custom-footer-links { display: flex !important; } } @media (max-width: 767px) { .my-custom-footer-links { display: none !important; } } @keyframes customBounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(10px); } } #scroll-down-btn { position: absolute; top: 85vh; left: 50%; animation: customBounce 2s infinite; color: white; text-align: center; cursor: pointer; z-index: 99; text-shadow: 0 1px 3px rgba(0,0,0,0.8); transition: opacity 0.3s; }</style>"
   # Inject custom footer html code
   footer: 
-    - "<script>if (window.innerWidth >= 768 && document.querySelector('.home-banner-container')) { document.querySelector('.home-banner-container').insertAdjacentHTML('beforeend', '<div class=\"absolute bottom-10 left-1/2 -translate-x-1/2 text-white flex flex-col items-center cursor-pointer animate-bounce z-50\" onclick=\"window.scrollTo({top: window.innerHeight, behavior: \\'smooth\\'})\" style=\"text-shadow: 0 1px 3px rgba(0,0,0,0.8);\"><span class=\"text-sm mb-2 font-bold\">向下滚动</span><i class=\"fa-solid fa-chevron-down fa-lg\"></i></div>'); }</script>"
+    - "<script>if (window.innerWidth >= 768 && !document.getElementById('scroll-down-btn')) { document.body.insertAdjacentHTML('afterbegin', '<div id=\"scroll-down-btn\" onclick=\"window.scrollTo({top: window.innerHeight, behavior: \\'smooth\\'})\" style=\"pointer-events: auto;\"><span style=\"display:block;font-size:14px;margin-bottom:8px;font-weight:bold;\">向下滚动</span><i class=\"fa-solid fa-chevron-down fa-lg\"></i></div>'); window.addEventListener('scroll', function() { var btn = document.getElementById('scroll-down-btn'); if(btn) { btn.style.opacity = window.scrollY > 100 ? '0' : '1'; btn.style.pointerEvents = window.scrollY > 100 ? 'none' : 'auto'; } }); }</script>"
     -
 # INJECT <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< end
 
