@@ -129,8 +129,8 @@
             document.documentElement.style.setProperty('--preloader-text-color', '#000');
         }
 
-        window.addEventListener('load', function () {
-            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(hidePreloader, 800); // Dismiss quickly, don't wait for video to fully load
         });
 
         function hidePreloader() {
