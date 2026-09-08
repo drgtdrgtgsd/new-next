@@ -116,7 +116,7 @@ home_banner:
     light: /images/wallhaven-wqery6-light.webp # light mode
     dark: /images/wallhaven-wqery6-dark.webp # dark mode
   # Home banner video (optional, placeholder path provided)
-  video: https://r2data.vfdvvfdvdf.qzz.io/9%E6%9C%886%E6%97%A5(1).mp4
+  video: https://r2data.vfdvvfdvdf.qzz.io/banner.mp4
   # Home banner title
   title: 高粱NexT的博客
   # Home banner subtitle
