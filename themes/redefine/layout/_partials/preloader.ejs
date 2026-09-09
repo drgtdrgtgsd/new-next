@@ -77,6 +77,10 @@
         // Clear the existing content
         textWrapper.innerHTML = '';
 
+        // Hide navbar immediately - will animate in after preloader finishes
+        var navbarEl = document.querySelector('.navbar-container');
+        if (navbarEl) navbarEl.classList.add('nav-hidden');
+
         // Wrap each word and its letters in spans
         words.forEach(function(word) {
             var wordSpan = document.createElement('span');
@@ -134,9 +138,11 @@
             preloader.style.opacity = '0';
             setTimeout(function () {
                 preloader.style.display = 'none';
-                // Trigger navbar slide-down animation after preloader is gone
-                var navbar = document.querySelector('.navbar-container');
-                if (navbar) navbar.classList.add('nav-animate-in');
+                // Now trigger navbar slide-down animation
+                if (navbarEl) {
+                    navbarEl.classList.remove('nav-hidden');
+                    navbarEl.classList.add('nav-animate-in');
+                }
             }, 200);
         }
     </script>
