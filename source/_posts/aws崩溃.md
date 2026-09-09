@@ -1,18 +1,16 @@
----
-title: 杂谈aws崩溃
+﻿---
+date: 2026-05-12 09:39:17
+title: 鏉傝皥aws宕╂簝
 cover: ""
 tags:
-- 网络
+- 缃戠粶
 - aws
 ---
-##### 还好之前服务器全部迁移到edgeone了
-<img src="\images\ca23100399d85173ab991db866787d18.jpg" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."/>
+##### 杩樺ソ涔嬪墠鏈嶅姟鍣ㄥ叏閮ㄨ縼绉诲埌edgeone浜?<img src="\images\ca23100399d85173ab991db866787d18.jpg" width="100%" height="100%" title="鎷煎啓妫€鏌ュ伐鍏稧rammarly." alt="鎷煎啓妫€鏌ュ伐鍏稧rammarly."/>
 
-<img src="\images\62a05f8e70764280b1826d59c20c1cff.jpg" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."/>
+<img src="\images\62a05f8e70764280b1826d59c20c1cff.jpg" width="100%" height="100%" title="鎷煎啓妫€鏌ュ伐鍏稧rammarly." alt="鎷煎啓妫€鏌ュ伐鍏稧rammarly."/>
 
-#### 让我发现了一张很有趣的图）
-<img src="\images\d571097b2bfc01a05a26420219fe0ef8.jpg" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."/>
+#### 璁╂垜鍙戠幇浜嗕竴寮犲緢鏈夎叮鐨勫浘锛?<img src="\images\d571097b2bfc01a05a26420219fe0ef8.jpg" width="100%" height="100%" title="鎷煎啓妫€鏌ュ伐鍏稧rammarly." alt="鎷煎啓妫€鏌ュ伐鍏稧rammarly."/>
 
-##### 关于其它语言版本导向问题
-因为gaoliang.icu归属权不属于本人，再加上没有去更改所以导致无法访问
-会找一段时间来修
+##### 鍏充簬鍏跺畠璇█鐗堟湰瀵煎悜闂
+鍥犱负gaoliang.icu褰掑睘鏉冧笉灞炰簬鏈汉锛屽啀鍔犱笂娌℃湁鍘绘洿鏀规墍浠ュ鑷存棤娉曡闂?浼氭壘涓€娈垫椂闂存潵淇
