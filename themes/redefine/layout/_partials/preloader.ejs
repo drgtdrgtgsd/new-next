@@ -134,11 +134,33 @@
             preloader.style.opacity = '0';
             setTimeout(function () {
                 preloader.style.display = 'none';
-                // Remove the CSS that hides navbar, then trigger slide-down animation
-                var hideStyle = document.getElementById('nav-hide-style');
-                if (hideStyle) hideStyle.remove();
+                
                 var navbar = document.querySelector('.navbar-container');
-                if (navbar) navbar.classList.add('nav-animate-in');
+                var header = document.querySelector('.main-content-header');
+                
+                if (navbar) {
+                    // Lock the state with inline styles before removing the global hide style
+                    navbar.style.opacity = '0';
+                    navbar.style.transform = 'translateY(-100%)';
+                    if (header) {
+                        header.style.visibility = 'visible';
+                        header.style.opacity = '1';
+                    }
+                    
+                    // Now safe to remove the global hide style
+                    var hideStyle = document.getElementById('nav-hide-style');
+                    if (hideStyle) hideStyle.remove();
+                    
+                    // Force a browser reflow so it registers the inline styles
+                    void navbar.offsetWidth;
+                    
+                    // Add the animation class
+                    navbar.classList.add('nav-animate-in');
+                    
+                    // Remove inline styles so the animation can take over
+                    navbar.style.opacity = '';
+                    navbar.style.transform = '';
+                }
             }, 200);
         }
     </script>
