@@ -42,6 +42,17 @@ export default {
       });
     }
 
-    return env.ASSETS.fetch(request);
+    // Serve static assets with caching for media
+    const assetResponse = await env.ASSETS.fetch(request);
+    
+    // Create a new response to modify headers (since ASSETS response is immutable)
+    const response = new Response(assetResponse.body, assetResponse);
+    
+    // Add aggressive caching for media files (video/images/fonts)
+    if (url.pathname.match(/\.(mp4|webm|jpg|jpeg|png|gif|webp|woff2?|ttf|svg)$/i)) {
+      response.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+    }
+    
+    return response;
   }
 };
