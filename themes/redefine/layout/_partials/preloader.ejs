@@ -86,7 +86,7 @@
             textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
         });
 
-        var animation = anime.timeline({loop: true})
+        var animation = anime.timeline({loop: false})
             .add({
                 targets: '.ml13 .letter',
                 translateY: [40,0],
@@ -128,10 +128,6 @@
             document.documentElement.style.setProperty('--preloader-background-color', '#fff');
             document.documentElement.style.setProperty('--preloader-text-color', '#000');
         }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            setTimeout(hidePreloader, 800); // Dismiss quickly, don't wait for video to fully load
-        });
 
         function hidePreloader() {
             var preloader = document.querySelector('.preloader');
