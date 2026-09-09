@@ -136,30 +136,19 @@
                 preloader.style.display = 'none';
                 
                 var navbar = document.querySelector('.navbar-container');
-                var header = document.querySelector('.main-content-header');
-                
                 if (navbar) {
-                    // Lock the state with inline styles before removing the global hide style
-                    navbar.style.opacity = '0';
-                    navbar.style.transform = 'translateY(-100%)';
-                    if (header) {
-                        header.style.visibility = 'visible';
-                        header.style.opacity = '1';
-                    }
-                    
-                    // Now safe to remove the global hide style
-                    var hideStyle = document.getElementById('nav-hide-style');
-                    if (hideStyle) hideStyle.remove();
-                    
-                    // Force a browser reflow so it registers the inline styles
-                    void navbar.offsetWidth;
-                    
-                    // Add the animation class
+                    // Start the animation immediately. 
+                    // It won't be visible yet because nav-hide-style overrides it.
                     navbar.classList.add('nav-animate-in');
                     
-                    // Remove inline styles so the animation can take over
-                    navbar.style.opacity = '';
-                    navbar.style.transform = '';
+                    // Wait exactly 2 browser frames to ensure the animation has started calculating
+                    requestAnimationFrame(function() {
+                        requestAnimationFrame(function() {
+                            // Now remove the global lock. The animation smoothly takes over.
+                            var hideStyle = document.getElementById('nav-hide-style');
+                            if (hideStyle) hideStyle.remove();
+                        });
+                    });
                 }
             }, 200);
         }
