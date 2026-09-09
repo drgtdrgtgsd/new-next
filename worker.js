@@ -27,20 +27,6 @@ export default {
       }
     }
     
-    // NEW endpoint for timeline
-    if (url.pathname.startsWith("/api/timeline/")) {
-        const username = url.pathname.split("/").pop();
-        try {
-            const response = await fetch(`https://syndication.twitter.com/srv/timeline-profile/screen-name/${username}`);
-            const html = await response.text();
-            return new Response(html, {
-                headers: { 'Content-Type': 'text/html', 'Access-Control-Allow-Origin': '*' }
-            });
-        } catch (e) {
-            return new Response(e.toString(), {status: 500});
-        }
-    }
-    
     if (url.pathname.startsWith("/api/twimg/")) {
         const targetUrl = url.pathname.replace("/api/twimg/", "https://pbs.twimg.com/");
         const response = await fetch(targetUrl);

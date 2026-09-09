@@ -173,11 +173,12 @@
             <i class="fa-solid fa-times"></i>
         </div>
 
-        <!-- Tweets Stream -->
-        <div id="x-native-tweets" style="flex: 1; overflow-y: auto; background: #15202b; padding-bottom: 20px;">
-            <div id="x-phone-loading" style="display: flex; align-items: center; justify-content: center; height: 100px;">
-                <i class="fa-solid fa-spinner fa-spin fa-2x" style="color: #8b98a5;"></i>
-            </div>
+        <!-- Action Area -->
+        <div style="flex: 1; background: #15202b; padding: 20px; display: flex; align-items: center; justify-content: center; border-bottom-left-radius: 28px; border-bottom-right-radius: 28px;">
+            <a href="https://x.com/nxhs3995" target="_blank" style="background: #ffffff; color: #0f1419; font-weight: 700; font-size: 15px; padding: 14px 32px; border-radius: 9999px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s; box-shadow: 0 4px 12px rgba(255,255,255,0.1);">
+                <i class="fa-brands fa-x-twitter" style="font-size: 18px;"></i>
+                View posts on X
+            </a>
         </div>
     </div>
 
@@ -196,10 +197,6 @@
         }
         /* Hover effect for clickable profile area */
         #x-native-banner:hover { opacity: 0.9; }
-        /* Scrollbar styles for tweets */
-        #x-native-tweets::-webkit-scrollbar { width: 6px; }
-        #x-native-tweets::-webkit-scrollbar-track { background: #15202b; }
-        #x-native-tweets::-webkit-scrollbar-thumb { background: #38444d; border-radius: 3px; }
     </style>
 
     <script>
@@ -248,77 +245,8 @@
                         bannerDiv.style.backgroundPosition = 'center';
                     }
                 }
-                
-                // Fetch timeline HTML
-                const tweetsContainer = document.getElementById('x-native-tweets');
-                try {
-                    const timeRes = await fetch('/api/timeline/nxhs3995');
-                    const timeHtml = await timeRes.text();
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(timeHtml, "text/html");
-                    
-                    const tweets = doc.querySelectorAll('.timeline-Tweet');
-                    tweetsContainer.innerHTML = "";
-                    
-                    if (tweets.length === 0) {
-                        tweetsContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: #8b98a5;">No recent posts available.</div>';
-                    } else {
-                        tweets.forEach((tweet, index) => {
-                            if (index > 10) return;
-                            const textEl = tweet.querySelector('.timeline-Tweet-text');
-                            const dateEl = tweet.querySelector('.timeline-Tweet-timestamp');
-                            const mediaEls = tweet.querySelectorAll('.timeline-Tweet-media img');
-                            
-                            const tweetDiv = document.createElement("div");
-                            tweetDiv.style.padding = "15px";
-                            tweetDiv.style.borderBottom = "1px solid #38444d";
-                            tweetDiv.style.fontSize = "14px";
-                            tweetDiv.style.color = "#ffffff";
-                            tweetDiv.style.lineHeight = "1.5";
-                            
-                            if (dateEl) {
-                                const dateDiv = document.createElement("div");
-                                dateDiv.style.fontSize = "13px";
-                                dateDiv.style.color = "#8b98a5";
-                                dateDiv.style.marginBottom = "8px";
-                                dateDiv.textContent = dateEl.textContent;
-                                tweetDiv.appendChild(dateDiv);
-                            }
-                            
-                            if (textEl) {
-                                const contentDiv = document.createElement("div");
-                                contentDiv.innerHTML = textEl.innerHTML;
-                                const links = contentDiv.querySelectorAll('a');
-                                links.forEach(a => {
-                                    a.style.color = '#1da1f2';
-                                    a.style.textDecoration = 'none';
-                                });
-                                tweetDiv.appendChild(contentDiv);
-                            }
-                            
-                            if (mediaEls.length > 0) {
-                                mediaEls.forEach(img => {
-                                    const newImg = document.createElement("img");
-                                    // Some media don't need proxying if they use syndication CDN, but we can proxy twimg just in case
-                                    newImg.src = img.src.replace('https://pbs.twimg.com/', '/api/twimg/');
-                                    newImg.style.maxWidth = "100%";
-                                    newImg.style.height = "auto";
-                                    newImg.style.borderRadius = "12px";
-                                    newImg.style.marginTop = "10px";
-                                    tweetDiv.appendChild(newImg);
-                                });
-                            }
-                            
-                            tweetsContainer.appendChild(tweetDiv);
-                        });
-                    }
-                } catch(e) {
-                    tweetsContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: #8b98a5;">Could not load posts.</div>';
-                }
-
             } catch (err) {
                 console.error(err);
-                document.getElementById('x-native-tweets').innerHTML = '<div style="padding: 20px; text-align: center; color: #8b98a5;">Failed to load profile.</div>';
             }
         };
 
