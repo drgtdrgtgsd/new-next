@@ -1,42 +1,56 @@
-﻿---
-date: 2024-05-01 02:39:58
-title: mix2s windows11arm 钃濆睆淇鏂规
+---
+date: 2025-02-27 18:38:25
+title: mix2s windows11arm 蓝屏修复方案
 cover: "https://user-images.githubusercontent.com/58414694/154399776-6790111e-3646-4e25-9ddb-2e1ad2975feb.png"
 tags:
 - windows11
-- 鍒锋満
+- 刷机
 - mix2s
-- 椹卞姩
+- 驱动
 ---
-## 鍓嶈█:
-www.楂樼脖.top 涓嶆彁渚涗换浣曟捣澶栧浘鐗囧姞閫?濡傛灉鍥剧墖鍔犺浇涓嶅嚭鏉ヨ鑷瑙ｅ喅
-灏侀潰鍥剧墖婧愶細GitHub
-鍥剧墖瀛樻斁婧愶細cloudflare
-## 闂:
-姣忔鐢ㄥ伐鍏风鍒峰叆windows11鍧囦細鍑虹幇钃濆睆闂杩樻湁绗竴娆″垵濮嬪寲鎶ラ敊闂
-鏈夋槸鏈夎В鍐崇殑鏂规硶锛屼絾鏄細缁忓父钃濆睆锛岃繖骞朵笉鏄暱涔呬箣璁?杩樻湁鍚瓛鍙戝嚭涓嶄簡澹伴煶锛岃繖涓叾瀹炴棭鏈夎В鍐虫柟妗堜簡
-## 杩囩▼
-棣栧厛鏄粠椹卞姩鍜寀efi瀵绘壘闂锛岀粡鍙戠幇鏄┍鍔ㄥ拰鎳掍汉鍖呴棶棰?鍦ㄩ叿瀹夊彂鐜颁簡涓€涓瘮鎴戝彂鐜版棭鐨勫笘瀛?<img src="\images\aaa.jpg" width="100%" height="100%" title="鎷煎啓妫€鏌ュ伐鍏稧rammarly." alt="鎷煎啓妫€鏌ュ伐鍏稧rammarly."/>
-<a class="button regular" target="_blank" rel="noopener" href="https://www.coolapk.com/feed/64040801?s=NDIyNzU3YmQxOGM0ZjcyZzY4NzI5NDk5ega1540" title="甯栧瓙閾炬帴"><i class="fa-solid fa-play-circle"></i> 甯栧瓙閾炬帴</a>
+## 前言:
+www.高粱.top 不提供任何海外图片加速
+如果图片加载不出来请自行解决
+封面图片源：GitHub
+图片存放源：cloudflare
+## 问题:
+每次用工具箱刷入windows11均会出现蓝屏问题还有第一次初始化报错问题
+有是有解决的方法，但是会经常蓝屏，这并不是长久之计
+还有听筒发出不了声音，这个其实早有解决方案了
+## 过程
+首先是从驱动和uefi寻找问题，经发现是驱动和懒人包问题
+在酷安发现了一个比我发现早的帖子
+<img src="\images\aaa.jpg" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."/>
+<a class="button regular" target="_blank" rel="noopener" href="https://www.coolapk.com/feed/64040801?s=NDIyNzU3YmQxOGM0ZjcyZzY4NzI5NDk5ega1540" title="帖子链接"><i class="fa-solid fa-play-circle"></i> 帖子链接</a>
 
-## 娉ㄥ叆鏁欑▼
-鎵撳紑甯栧瓙閾炬帴骞朵笅杞介┍鍔ㄥ拰鎳掍汉鍖?灏嗕笅杞藉ソ鐨勯┍鍔ㄨВ鍘嬶紝浣犱細鑾峰緱uefi鍜宒river
-uefi鏇挎崲鐢ㄥ伐鍏风鏇挎崲
-driver鎵撳紑浣犵殑宸ュ叿绠辨枃浠跺す鎵惧埌mix2s鐨刣river鏂囦欢澶硅繘琛屾浛鎹?<img src="\images\kkk.png" width="100%" height="100%" title="鎷煎啓妫€鏌ュ伐鍏稧rammarly." alt="鎷煎啓妫€鏌ュ伐鍏稧rammarly."/>
+## 注入教程
+打开帖子链接并下载驱动和懒人包
+将下载好的驱动解压，你会获得uefi和driver
+uefi替换用工具箱替换
+driver打开你的工具箱文件夹找到mix2s的driver文件夹进行替换
+<img src="\images\kkk.png" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."/>
 
-## 鏈€鍚?鎵撳紑宸ュ叿绠卞敖鎯呯殑鍒锋満鍚э紒锛侊紒锛侊紒锛侊紒
-璁板緱瑕佺敤甯栧瓙鐨勬噿浜哄寘鍣~
-<img src="\images\ssssss.png" width="100%" height="100%" title="鎷煎啓妫€鏌ュ伐鍏稧rammarly." alt="鎷煎啓妫€鏌ュ伐鍏稧rammarly."/>
+## 最后
+打开工具箱尽情的刷机吧！！！！！！！
+记得要用帖子的懒人包噢~~
+<img src="\images\ssssss.png" width="100%" height="100%" title="拼写检查工具Grammarly." alt="拼写检查工具Grammarly."/>
 
-## 鐤戞儜瑙ｉ毦
-涓轰粈涔堟槸娴嬭瘯妯″紡锛?绛旓細娌℃湁瀹夊叏鍚姩锛岄┍鍔ㄤ篃娌℃湁绛惧悕
+## 疑惑解难
+为什么是测试模式？
+答：没有安全启动，驱动也没有签名
 
-鏈変簺杞欢鎶ラ敊瑁呬笉涓婏紵
-绛旓細璇曚竴涓嬭ˉ杩愯搴?.NET Framework鈥屻€佲€孌irectX鈥?
+有些软件报错装不上？
+答：试一下补运行库(.NET Framework‌、‌DirectX‌)
 
-娓告垙鎶ラ敊锛屽嵆浣胯ˉ浜嗚繍琛屽簱锛?绛旓細濡傛灉鏄姤閿檊pu椹卞姩锛屼负gpu椹卞姩闂锛岃鍚憁ix2s椹卞姩浼樺寲浣滆€呰仈绯?
-Windows鐘舵€佹墜鏈烘棤娉曞厖鐢碉紵
-绛旓細鍏呯數鍣ㄨ浣跨敤40w浠ヤ笂鐨勫揩鍏呭厖鐢靛櫒
+游戏报错，即使补了运行库？
+答：如果是报错gpu驱动，为gpu驱动问题，请向mix2s驱动优化作者联系
 
-鍒峰畬windows鍚庡垏鎹㈠畨鍗撳嚭鐜版帀鍩哄甫锛?绛旓細鍢垮樋杩欐槸涓巹瀛﹂棶棰榙oge鎴戜篃涓嶆槸寰堟竻妤氾紝浣犺瘯鑰呯敤鍘熺増鐨剅ec鍏堟牸寮忓寲涓€閬?### 濡傝繕鏈夊叾浠栭棶棰樿鍦ㄨ瘎璁哄尯鍙戯紒
-## 褰辩墖棰勫憡锛?銆妋ix2s鐨勪竴骞翠娇鐢ㄦ劅鍙椼€?(灏嗛鍙慪ouTube銆乥ilibili)
+Windows状态手机无法充电？
+答：充电器要使用40w以上的快充充电器
+
+刷完windows后切换安卓出现掉基带？
+答：嘿嘿这是个玄学问题doge我也不是很清楚，你试者用原版的rec先格式化一遍
+### 如还有其他问题请在评论区发！
+## 影片预告：
+《mix2s的一年使用感受》
+(将首发YouTube、bilibili)
