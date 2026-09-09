@@ -148,15 +148,33 @@
         <svg style="width: 38px; height: 38px; fill: currentColor; stroke: currentColor; stroke-width: 40; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); transition: transform 0.3s;" viewBox="0 0 1200 1227" xmlns="http://www.w3.org/2000/svg">
             <path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"/>
         </svg>
-    </a>
     <!-- Phone Modal Container -->
-    <div id="x-phone-modal" style="position: absolute; bottom: 100px; right: 40px; width: 360px; height: 600px; background: #ffffff; border-radius: 36px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.05); z-index: 30; overflow: hidden; border: 8px solid #111; transform: translateY(40px) scale(0.95); opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: bottom right;">
-        <!-- Loading spinner -->
-        <div id="x-phone-loading" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #fff; z-index: 35;">
-            <i class="fa-solid fa-spinner fa-spin fa-2x text-gray-400"></i>
+    <div id="x-phone-modal" style="position: absolute; bottom: 100px; right: 40px; width: 360px; height: 600px; background: #ffffff; border-radius: 36px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.05); z-index: 30; overflow: hidden; border: 8px solid #111; transform: translateY(40px) scale(0.95); opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: bottom right; display: flex; flex-direction: column;">
+        
+        <!-- Header / Banner -->
+        <div style="height: 120px; background: #1da1f2; position: relative; flex-shrink: 0;">
+            <div id="x-native-avatar-container" style="position: absolute; bottom: -35px; left: 15px; width: 70px; height: 70px; border-radius: 50%; border: 4px solid #fff; background: #eee; overflow: hidden;">
+                <img id="x-native-avatar" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+            </div>
+            <!-- Close button inside phone -->
+            <div id="x-phone-close" style="position: absolute; top: 15px; right: 15px; width: 30px; height: 30px; background: rgba(0,0,0,0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; backdrop-filter: blur(4px);">
+                <i class="fa-solid fa-times"></i>
+            </div>
         </div>
-        <!-- Iframe to Proxied Twitter/Nitter -->
-        <iframe id="x-phone-iframe" src="about:blank" data-src="https://xcancel.com/nxhs3995" style="width: 100%; height: 100%; border: none; position: relative; z-index: 36;" onload="document.getElementById('x-phone-loading').style.display='none'"></iframe>
+
+        <!-- Profile Info -->
+        <div style="padding: 45px 15px 15px 15px; border-bottom: 1px solid #eff3f4; flex-shrink: 0;">
+            <h2 id="x-native-name" style="margin: 0; font-size: 18px; font-weight: 800; color: #0f1419;">Loading...</h2>
+            <p id="x-native-handle" style="margin: 2px 0 10px 0; font-size: 14px; color: #536471;">@nxhs3995</p>
+            <p id="x-native-bio" style="margin: 0; font-size: 14px; color: #0f1419; line-height: 1.4;"></p>
+        </div>
+
+        <!-- Tweets Stream -->
+        <div id="x-native-tweets" style="flex: 1; overflow-y: auto; background: #fff; padding-bottom: 20px;">
+            <div id="x-phone-loading" style="display: flex; align-items: center; justify-content: center; height: 100px;">
+                <i class="fa-solid fa-spinner fa-spin fa-2x text-gray-400"></i>
+            </div>
+        </div>
     </div>
 
     <style>
@@ -184,8 +202,83 @@
         // Handle X logo click
         const xLogo = document.getElementById('custom-x-logo');
         const phoneModal = document.getElementById('x-phone-modal');
-        const phoneIframe = document.getElementById('x-phone-iframe');
+        const closeBtn = document.getElementById('x-phone-close');
+        let dataLoaded = false;
         
+        const loadTwitterData = async () => {
+            if (dataLoaded) return;
+            dataLoaded = true;
+            try {
+                // Fetch from our Worker API proxy
+                const res = await fetch('/api/twitter/nxhs3995');
+                const text = await res.text();
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(text, "text/xml");
+                
+                const title = xmlDoc.querySelector("channel > title")?.textContent || "高粱NexT";
+                const desc = xmlDoc.querySelector("channel > description")?.textContent || "";
+                const image = xmlDoc.querySelector("channel > image > url")?.textContent;
+                
+                document.getElementById('x-native-name').textContent = title.replace(/ \/ nitter/i, '');
+                document.getElementById('x-native-bio').textContent = desc;
+                if (image) {
+                    const avatarImg = document.getElementById('x-native-avatar');
+                    avatarImg.src = image;
+                    avatarImg.style.display = 'block';
+                }
+                
+                const items = xmlDoc.querySelectorAll("item");
+                const tweetsContainer = document.getElementById('x-native-tweets');
+                tweetsContainer.innerHTML = "";
+                
+                items.forEach((item, index) => {
+                    if (index > 10) return; // Limit to 10 tweets
+                    let pubDate = item.querySelector("pubDate")?.textContent || "";
+                    let content = item.querySelector("description")?.textContent || "";
+                    
+                    // Simple formatting of the tweet HTML
+                    // Nitter RSS puts the full tweet HTML in description
+                    
+                    const tweetDiv = document.createElement("div");
+                    tweetDiv.style.padding = "15px";
+                    tweetDiv.style.borderBottom = "1px solid #eff3f4";
+                    tweetDiv.style.fontSize = "14px";
+                    tweetDiv.style.color = "#0f1419";
+                    tweetDiv.style.lineHeight = "1.5";
+                    
+                    const dateDiv = document.createElement("div");
+                    dateDiv.style.fontSize = "13px";
+                    dateDiv.style.color = "#536471";
+                    dateDiv.style.marginBottom = "8px";
+                    try {
+                        const d = new Date(pubDate);
+                        dateDiv.textContent = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
+                    } catch(e) {
+                        dateDiv.textContent = pubDate;
+                    }
+                    
+                    const contentDiv = document.createElement("div");
+                    contentDiv.innerHTML = content;
+                    
+                    // Style images inside tweet
+                    const imgs = contentDiv.querySelectorAll("img");
+                    imgs.forEach(img => {
+                        img.style.maxWidth = "100%";
+                        img.style.height = "auto";
+                        img.style.borderRadius = "12px";
+                        img.style.marginTop = "10px";
+                    });
+                    
+                    tweetDiv.appendChild(dateDiv);
+                    tweetDiv.appendChild(contentDiv);
+                    tweetsContainer.appendChild(tweetDiv);
+                });
+            } catch (err) {
+                console.error(err);
+                document.getElementById('x-native-tweets').innerHTML = '<div style="padding: 20px; text-align: center; color: #536471;">Failed to load tweets.</div>';
+            }
+        };
+
         if (xLogo && phoneModal) {
             xLogo.addEventListener('click', (e) => {
                 e.preventDefault(); // Stop normal link opening
@@ -194,14 +287,18 @@
                 const isActive = phoneModal.classList.contains('active');
                 if (!isActive) {
                     phoneModal.classList.add('active');
-                    // Lazy load iframe src
-                    if (phoneIframe.src === 'about:blank' || phoneIframe.src === window.location.href) {
-                        phoneIframe.src = phoneIframe.getAttribute('data-src');
-                    }
+                    loadTwitterData();
                 } else {
                     phoneModal.classList.remove('active');
                 }
             });
+            
+            if (closeBtn) {
+                closeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    phoneModal.classList.remove('active');
+                });
+            }
             
             // Click outside to close
             document.addEventListener('click', (e) => {
