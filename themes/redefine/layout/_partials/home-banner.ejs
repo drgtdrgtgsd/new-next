@@ -152,6 +152,10 @@
     <style>
         #custom-x-logo:hover { transform: scale(1.05); }
         #custom-x-logo:hover #custom-x-tooltip { opacity: 1 !important; transform: translateX(0) !important; }
+        /* Hide X logo on mobile */
+        @media (max-width: 768px) {
+            #custom-x-logo { display: none !important; }
+        }
     </style>
 
     <script>
@@ -160,5 +164,19 @@
             const target = document.querySelector('.main-content-container');
             target.scrollIntoView({ behavior: 'smooth'});
         }
+        
+        // Fade out X logo on scroll down
+        window.addEventListener('scroll', () => {
+            const xLogo = document.getElementById('custom-x-logo');
+            if (xLogo) {
+                if (window.scrollY > 50) {
+                    xLogo.style.opacity = '0';
+                    xLogo.style.pointerEvents = 'none';
+                } else {
+                    xLogo.style.opacity = '1';
+                    xLogo.style.pointerEvents = 'auto';
+                }
+            }
+        });
     </script>
 </div>
