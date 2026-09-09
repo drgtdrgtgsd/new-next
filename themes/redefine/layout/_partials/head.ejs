@@ -120,6 +120,20 @@
 
     <% if (theme.global.preloader) { %>
         <%- renderJS('js/libs/anime.min.js')%>
+        <% if (is_home() && (!page.current || page.current === 1)) { %>
+        <script>
+            /* Immediately hide the navbar before it renders, so it can slide in after preloader finishes.
+               This script runs synchronously in <head> before any paint. */
+            document.addEventListener('DOMContentLoaded', function() {
+                var nav = document.querySelector('.navbar-container');
+                if (nav) {
+                    nav.style.marginTop = '-150px';
+                    nav.style.opacity = '0';
+                    nav.style.transition = 'none';
+                }
+            });
+        </script>
+        <% } %>
     <% } %>
 
     <%- export_config() %>
