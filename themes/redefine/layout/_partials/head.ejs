@@ -122,25 +122,19 @@
         <%- renderJS('js/libs/anime.min.js')%>
         <style id="nav-hide-style">
             /* Use high specificity to hide the navbar initially without !important.
-               Added translateZ(0) and backface-visibility to prevent Chromium backdrop-filter black flash bugs.
-               CRITICAL 1: Do NOT use opacity: 0 or visibility: hidden.
-               CRITICAL 2: Do NOT use exactly -100% for translateY, otherwise Chrome's Frustum Culling destroys 
-               the off-screen layer and re-allocates it (flashing black) when the animation starts. -99.9% intersects the viewport slightly. */
+               We use margin-top instead of transform to COMPLETELY bypass Chromium's GPU compositor 
+               bug with backdrop-filter. Animating margin-top forces layout rendering which never flashes black. */
             html body header.navbar-container {
-                transform: translateY(-99.9%) translateZ(0);
-                opacity: 0.001;
-                will-change: transform, opacity;
-                backface-visibility: hidden;
+                margin-top: -150px;
+                opacity: 0;
             }
             /* Ensure the animation makes it visible */
             html body header.navbar-container.nav-animate-in {
                 animation: navSlideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-                will-change: transform, opacity;
-                backface-visibility: hidden;
             }
             @keyframes navSlideDown { 
-                0% { transform: translateY(-99.9%) translateZ(0); opacity: 0.001; } 
-                100% { transform: translateY(0) translateZ(0); opacity: 1; } 
+                0% { margin-top: -150px; opacity: 0; } 
+                100% { margin-top: 0; opacity: 1; } 
             }
         </style>
     <% } %>
