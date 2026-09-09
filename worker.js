@@ -20,7 +20,11 @@ export default {
         }
 
         return new Response(JSON.stringify(data), {
-          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+          headers: { 
+            'Content-Type': 'application/json', 
+            'Access-Control-Allow-Origin': '*',
+            'Cache-Control': 'public, max-age=3600' // Cache at edge for 1 hour
+          }
         });
       }
 

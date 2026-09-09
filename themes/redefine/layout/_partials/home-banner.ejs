@@ -207,46 +207,70 @@
         
         window.loadTwitterData = async () => {
             if (window._xLogoDataLoaded) return;
-            window._xLogoDataLoaded = true;
+            
+            const renderUser = (user) => {
+                const nameEl = document.getElementById('x-native-name');
+                if (nameEl) nameEl.textContent = user.name || "高粱NexT";
+                const handleEl = document.getElementById('x-native-handle');
+                if (handleEl) handleEl.textContent = "@" + user.screen_name;
+                const bioEl = document.getElementById('x-native-bio');
+                if (bioEl) bioEl.innerHTML = (user.description || "").replace(/\n/g, '<br>');
+                
+                const statsEl = document.getElementById('x-native-stats');
+                if (statsEl) {
+                    statsEl.innerHTML = `
+                        <div style="display: flex; gap: 15px; margin-top: 15px; font-size: 14px;">
+                            <div><strong style="color: #ffffff;">${user.following}</strong> <span style="color: #8b98a5;">Following</span></div>
+                            <div><strong style="color: #ffffff;">${user.followers}</strong> <span style="color: #8b98a5;">Followers</span></div>
+                        </div>
+                    `;
+                }
+
+                if (user.avatar_url) {
+                    const avatarImg = document.getElementById('x-native-avatar');
+                    if (avatarImg) {
+                        avatarImg.src = user.avatar_url.replace('_normal', '_400x400');
+                        avatarImg.style.display = 'block';
+                    }
+                }
+                if (user.banner_url) {
+                    const bannerDiv = document.getElementById('x-native-banner');
+                    if (bannerDiv) {
+                        bannerDiv.style.backgroundImage = `url(${user.banner_url})`;
+                        bannerDiv.style.backgroundSize = 'cover';
+                        bannerDiv.style.backgroundPosition = 'center';
+                    }
+                }
+            };
+
             try {
+                // Check localStorage cache first
+                const cacheStr = localStorage.getItem('x-profile-cache');
+                if (cacheStr) {
+                    try {
+                        const cache = JSON.parse(cacheStr);
+                        // 1 hour expiry (3600000 ms)
+                        if (Date.now() - cache.timestamp < 3600000) {
+                            renderUser(cache.data);
+                            window._xLogoDataLoaded = true;
+                            // Optionally still fetch in background to update cache, but we don't strictly need to
+                            return; 
+                        }
+                    } catch (e) {}
+                }
+
+                window._xLogoDataLoaded = true;
                 // Fetch profile JSON
                 const res = await fetch('/api/twitter/nxhs3995');
                 const json = await res.json();
                 
                 if (json.code === 200 && json.user) {
-                    const user = json.user;
-                    const nameEl = document.getElementById('x-native-name');
-                    if (nameEl) nameEl.textContent = user.name || "高粱NexT";
-                    const handleEl = document.getElementById('x-native-handle');
-                    if (handleEl) handleEl.textContent = "@" + user.screen_name;
-                    const bioEl = document.getElementById('x-native-bio');
-                    if (bioEl) bioEl.innerHTML = (user.description || "").replace(/\n/g, '<br>');
-                    
-                    const statsEl = document.getElementById('x-native-stats');
-                    if (statsEl) {
-                        statsEl.innerHTML = `
-                            <div style="display: flex; gap: 15px; margin-top: 15px; font-size: 14px;">
-                                <div><strong style="color: #ffffff;">${user.following}</strong> <span style="color: #8b98a5;">Following</span></div>
-                                <div><strong style="color: #ffffff;">${user.followers}</strong> <span style="color: #8b98a5;">Followers</span></div>
-                            </div>
-                        `;
-                    }
-
-                    if (user.avatar_url) {
-                        const avatarImg = document.getElementById('x-native-avatar');
-                        if (avatarImg) {
-                            avatarImg.src = user.avatar_url.replace('_normal', '_400x400');
-                            avatarImg.style.display = 'block';
-                        }
-                    }
-                    if (user.banner_url) {
-                        const bannerDiv = document.getElementById('x-native-banner');
-                        if (bannerDiv) {
-                            bannerDiv.style.backgroundImage = `url(${user.banner_url})`;
-                            bannerDiv.style.backgroundSize = 'cover';
-                            bannerDiv.style.backgroundPosition = 'center';
-                        }
-                    }
+                    // Save to cache
+                    localStorage.setItem('x-profile-cache', JSON.stringify({
+                        timestamp: Date.now(),
+                        data: json.user
+                    }));
+                    renderUser(json.user);
                 }
             } catch (err) {
                 console.error(err);
