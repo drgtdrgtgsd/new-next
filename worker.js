@@ -5,9 +5,9 @@ export default {
     if (url.pathname.startsWith("/api/twitter/")) {
       const username = url.pathname.split("/").pop();
       const instances = [
-        \https://nitter.poast.org/\/rss\,
-        \https://nitter.privacydev.net/\/rss\,
-        \https://xcancel.com/\/rss\
+        `https://nitter.poast.org/${username}/rss`,
+        `https://nitter.privacydev.net/${username}/rss`,
+        `https://xcancel.com/${username}/rss`
       ];
       
       let xmlText = "";
