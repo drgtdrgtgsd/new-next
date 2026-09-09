@@ -10,7 +10,6 @@ export default {
         });
         const data = await response.json();
         
-        // Rewrite image URLs to go through our proxy
         if (data.user) {
            if (data.user.avatar_url) {
               data.user.avatar_url = data.user.avatar_url.replace('https://pbs.twimg.com/', '/api/twimg/');
@@ -26,6 +25,20 @@ export default {
       } catch (e) {
         return new Response(JSON.stringify({error: e.toString()}), {status: 500});
       }
+    }
+    
+    // NEW endpoint for timeline
+    if (url.pathname.startsWith("/api/timeline/")) {
+        const username = url.pathname.split("/").pop();
+        try {
+            const response = await fetch(`https://syndication.twitter.com/srv/timeline-profile/screen-name/${username}`);
+            const html = await response.text();
+            return new Response(html, {
+                headers: { 'Content-Type': 'text/html', 'Access-Control-Allow-Origin': '*' }
+            });
+        } catch (e) {
+            return new Response(e.toString(), {status: 500});
+        }
     }
     
     if (url.pathname.startsWith("/api/twimg/")) {

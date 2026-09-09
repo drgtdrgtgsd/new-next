@@ -149,30 +149,34 @@
             <path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z"/>
         </svg>
     <!-- Phone Modal Container -->
-    <div id="x-phone-modal" style="position: absolute; bottom: 100px; right: 40px; width: 360px; height: 600px; background: #ffffff; border-radius: 36px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.05); z-index: 30; overflow: hidden; border: 8px solid #111; transform: translateY(40px) scale(0.95); opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: bottom right; display: flex; flex-direction: column;">
+    <div id="x-phone-modal" style="position: absolute; bottom: 100px; right: 40px; width: 360px; height: 600px; background: #15202b; border-radius: 36px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1); z-index: 30; overflow: hidden; border: 8px solid #000; transform: translateY(40px) scale(0.95); opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: bottom right; display: flex; flex-direction: column;">
         
-        <!-- Header / Banner -->
-        <div id="x-native-banner" style="height: 120px; background: #1da1f2; position: relative; flex-shrink: 0;">
-            <div id="x-native-avatar-container" style="position: absolute; bottom: -35px; left: 15px; width: 70px; height: 70px; border-radius: 50%; border: 4px solid #fff; background: #eee; overflow: hidden;">
-                <img id="x-native-avatar" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+        <!-- Header / Banner (Click to open real X) -->
+        <a href="https://x.com/nxhs3995" target="_blank" style="text-decoration: none; display: block;">
+            <div id="x-native-banner" style="height: 120px; background: #1da1f2; position: relative; flex-shrink: 0; transition: opacity 0.2s;">
+                <div id="x-native-avatar-container" style="position: absolute; bottom: -35px; left: 15px; width: 70px; height: 70px; border-radius: 50%; border: 4px solid #15202b; background: #22303c; overflow: hidden;">
+                    <img id="x-native-avatar" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                </div>
             </div>
-            <!-- Close button inside phone -->
-            <div id="x-phone-close" style="position: absolute; top: 15px; right: 15px; width: 30px; height: 30px; background: rgba(0,0,0,0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; backdrop-filter: blur(4px);">
-                <i class="fa-solid fa-times"></i>
+            <!-- Profile Info -->
+            <div style="padding: 45px 15px 15px 15px; border-bottom: 1px solid #38444d; flex-shrink: 0; background: #15202b;">
+                <h2 id="x-native-name" style="margin: 0; font-size: 18px; font-weight: 800; color: #ffffff;">Loading...</h2>
+                <p id="x-native-handle" style="margin: 2px 0 10px 0; font-size: 14px; color: #8b98a5;">@nxhs3995</p>
+                <p id="x-native-bio" style="margin: 0; font-size: 14px; color: #ffffff; line-height: 1.4;"></p>
+                <!-- Stats container (injected by JS) -->
+                <div id="x-native-stats"></div>
             </div>
-        </div>
+        </a>
 
-        <!-- Profile Info -->
-        <div style="padding: 45px 15px 15px 15px; border-bottom: 1px solid #eff3f4; flex-shrink: 0;">
-            <h2 id="x-native-name" style="margin: 0; font-size: 18px; font-weight: 800; color: #0f1419;">Loading...</h2>
-            <p id="x-native-handle" style="margin: 2px 0 10px 0; font-size: 14px; color: #536471;">@nxhs3995</p>
-            <p id="x-native-bio" style="margin: 0; font-size: 14px; color: #0f1419; line-height: 1.4;"></p>
+        <!-- Close button inside phone (absolute over everything) -->
+        <div id="x-phone-close" style="position: absolute; top: 15px; right: 15px; width: 30px; height: 30px; background: rgba(0,0,0,0.6); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; backdrop-filter: blur(4px); z-index: 40;">
+            <i class="fa-solid fa-times"></i>
         </div>
 
         <!-- Tweets Stream -->
-        <div id="x-native-tweets" style="flex: 1; overflow-y: auto; background: #fff; padding-bottom: 20px;">
+        <div id="x-native-tweets" style="flex: 1; overflow-y: auto; background: #15202b; padding-bottom: 20px;">
             <div id="x-phone-loading" style="display: flex; align-items: center; justify-content: center; height: 100px;">
-                <i class="fa-solid fa-spinner fa-spin fa-2x text-gray-400"></i>
+                <i class="fa-solid fa-spinner fa-spin fa-2x" style="color: #8b98a5;"></i>
             </div>
         </div>
     </div>
@@ -190,6 +194,12 @@
             opacity: 1 !important;
             pointer-events: auto !important;
         }
+        /* Hover effect for clickable profile area */
+        #x-native-banner:hover { opacity: 0.9; }
+        /* Scrollbar styles for tweets */
+        #x-native-tweets::-webkit-scrollbar { width: 6px; }
+        #x-native-tweets::-webkit-scrollbar-track { background: #15202b; }
+        #x-native-tweets::-webkit-scrollbar-thumb { background: #38444d; border-radius: 3px; }
     </style>
 
     <script>
@@ -209,54 +219,106 @@
             if (dataLoaded) return;
             dataLoaded = true;
             try {
-                // Fetch from our Worker API proxy (returns JSON from fxtwitter)
+                // Fetch profile JSON
                 const res = await fetch('/api/twitter/nxhs3995');
                 const json = await res.json();
                 
-                if (json.code !== 200 || !json.user) {
-                    throw new Error("Failed to load user data");
-                }
-                
-                const user = json.user;
-                
-                // Update text
-                document.getElementById('x-native-name').textContent = user.name || "高粱NexT";
-                document.getElementById('x-native-handle').textContent = "@" + user.screen_name;
-                
-                // Set Bio and handle newlines
-                const bioEl = document.getElementById('x-native-bio');
-                bioEl.innerHTML = (user.description || "").replace(/\n/g, '<br>');
-                
-                // Stats block
-                const statsHtml = `
-                    <div style="display: flex; gap: 15px; margin-top: 15px; font-size: 14px;">
-                        <div><strong style="color: #0f1419;">${user.following}</strong> <span style="color: #536471;">Following</span></div>
-                        <div><strong style="color: #0f1419;">${user.followers}</strong> <span style="color: #536471;">Followers</span></div>
-                    </div>
-                `;
-                bioEl.insertAdjacentHTML('afterend', statsHtml);
+                if (json.code === 200 && json.user) {
+                    const user = json.user;
+                    document.getElementById('x-native-name').textContent = user.name || "高粱NexT";
+                    document.getElementById('x-native-handle').textContent = "@" + user.screen_name;
+                    document.getElementById('x-native-bio').innerHTML = (user.description || "").replace(/\n/g, '<br>');
+                    
+                    document.getElementById('x-native-stats').innerHTML = `
+                        <div style="display: flex; gap: 15px; margin-top: 15px; font-size: 14px;">
+                            <div><strong style="color: #ffffff;">${user.following}</strong> <span style="color: #8b98a5;">Following</span></div>
+                            <div><strong style="color: #ffffff;">${user.followers}</strong> <span style="color: #8b98a5;">Followers</span></div>
+                        </div>
+                    `;
 
-                // Update images
-                if (user.avatar_url) {
-                    const avatarImg = document.getElementById('x-native-avatar');
-                    avatarImg.src = user.avatar_url.replace('_normal', '_400x400');
-                    avatarImg.style.display = 'block';
-                }
-                
-                if (user.banner_url) {
-                    const bannerDiv = document.getElementById('x-native-banner');
-                    if(bannerDiv) {
+                    if (user.avatar_url) {
+                        const avatarImg = document.getElementById('x-native-avatar');
+                        avatarImg.src = user.avatar_url.replace('_normal', '_400x400');
+                        avatarImg.style.display = 'block';
+                    }
+                    if (user.banner_url) {
+                        const bannerDiv = document.getElementById('x-native-banner');
                         bannerDiv.style.backgroundImage = `url(${user.banner_url})`;
                         bannerDiv.style.backgroundSize = 'cover';
                         bannerDiv.style.backgroundPosition = 'center';
                     }
                 }
                 
-                // Hide loading spinner in tweets area
-                document.getElementById('x-native-tweets').innerHTML = '';
+                // Fetch timeline HTML
+                const tweetsContainer = document.getElementById('x-native-tweets');
+                try {
+                    const timeRes = await fetch('/api/timeline/nxhs3995');
+                    const timeHtml = await timeRes.text();
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(timeHtml, "text/html");
+                    
+                    const tweets = doc.querySelectorAll('.timeline-Tweet');
+                    tweetsContainer.innerHTML = "";
+                    
+                    if (tweets.length === 0) {
+                        tweetsContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: #8b98a5;">No recent posts available.</div>';
+                    } else {
+                        tweets.forEach((tweet, index) => {
+                            if (index > 10) return;
+                            const textEl = tweet.querySelector('.timeline-Tweet-text');
+                            const dateEl = tweet.querySelector('.timeline-Tweet-timestamp');
+                            const mediaEls = tweet.querySelectorAll('.timeline-Tweet-media img');
+                            
+                            const tweetDiv = document.createElement("div");
+                            tweetDiv.style.padding = "15px";
+                            tweetDiv.style.borderBottom = "1px solid #38444d";
+                            tweetDiv.style.fontSize = "14px";
+                            tweetDiv.style.color = "#ffffff";
+                            tweetDiv.style.lineHeight = "1.5";
+                            
+                            if (dateEl) {
+                                const dateDiv = document.createElement("div");
+                                dateDiv.style.fontSize = "13px";
+                                dateDiv.style.color = "#8b98a5";
+                                dateDiv.style.marginBottom = "8px";
+                                dateDiv.textContent = dateEl.textContent;
+                                tweetDiv.appendChild(dateDiv);
+                            }
+                            
+                            if (textEl) {
+                                const contentDiv = document.createElement("div");
+                                contentDiv.innerHTML = textEl.innerHTML;
+                                const links = contentDiv.querySelectorAll('a');
+                                links.forEach(a => {
+                                    a.style.color = '#1da1f2';
+                                    a.style.textDecoration = 'none';
+                                });
+                                tweetDiv.appendChild(contentDiv);
+                            }
+                            
+                            if (mediaEls.length > 0) {
+                                mediaEls.forEach(img => {
+                                    const newImg = document.createElement("img");
+                                    // Some media don't need proxying if they use syndication CDN, but we can proxy twimg just in case
+                                    newImg.src = img.src.replace('https://pbs.twimg.com/', '/api/twimg/');
+                                    newImg.style.maxWidth = "100%";
+                                    newImg.style.height = "auto";
+                                    newImg.style.borderRadius = "12px";
+                                    newImg.style.marginTop = "10px";
+                                    tweetDiv.appendChild(newImg);
+                                });
+                            }
+                            
+                            tweetsContainer.appendChild(tweetDiv);
+                        });
+                    }
+                } catch(e) {
+                    tweetsContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: #8b98a5;">Could not load posts.</div>';
+                }
+
             } catch (err) {
                 console.error(err);
-                document.getElementById('x-native-tweets').innerHTML = '<div style="padding: 20px; text-align: center; color: #536471;">Failed to load profile.</div>';
+                document.getElementById('x-native-tweets').innerHTML = '<div style="padding: 20px; text-align: center; color: #8b98a5;">Failed to load profile.</div>';
             }
         };
 
@@ -277,6 +339,7 @@
             if (closeBtn) {
                 closeBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
+                    e.preventDefault();
                     phoneModal.classList.remove('active');
                 });
             }
