@@ -32,6 +32,8 @@
         justify-content: center;
         position: fixed;
         padding: 12px;
+        margin: 0 !important;
+        border: none !important;
         top: 0;
         right: 0;
         bottom: 0;
@@ -39,7 +41,7 @@
         width: 100vw;
         height: 100vh; /* 'h-screen' is 100% of the viewport height */
         background-color: var(--preloader-background-color);
-        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        z-index: 999999 !important; /* Force it above everything including progress bar */
         transition: opacity 0.2s ease-in-out;
     }
 
