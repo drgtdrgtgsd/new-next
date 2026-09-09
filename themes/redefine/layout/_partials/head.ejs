@@ -120,6 +120,7 @@
 
     <% if (theme.global.preloader) { %>
         <%- renderJS('js/libs/anime.min.js')%>
+        <style id="nav-hide-style">.navbar-container { opacity: 0 !important; transform: translateY(-100%) !important; }</style>
     <% } %>
 
     <%- export_config() %>
