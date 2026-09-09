@@ -122,21 +122,25 @@
         <%- renderJS('js/libs/anime.min.js')%>
         <style id="nav-hide-style">
             /* Use high specificity to hide the navbar initially without !important.
-               This allows the @keyframes animation to seamlessly override it without ANY Javascript intervention. */
+               This allows the @keyframes animation to seamlessly override it without ANY Javascript intervention.
+               Added translateZ(0) and backface-visibility to prevent Chromium backdrop-filter black flash bugs. */
             html body header.navbar-container {
-                transform: translateY(-100%);
+                transform: translateY(-100%) translateZ(0);
                 opacity: 0;
                 visibility: hidden;
+                will-change: transform, opacity;
+                backface-visibility: hidden;
             }
             /* Ensure the animation makes it visible */
             html body header.navbar-container.nav-animate-in {
                 visibility: visible;
                 animation: navSlideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
                 will-change: transform, opacity;
+                backface-visibility: hidden;
             }
             @keyframes navSlideDown { 
-                0% { transform: translateY(-100%); opacity: 0; visibility: hidden; } 
-                100% { transform: translateY(0); opacity: 1; visibility: visible; } 
+                0% { transform: translateY(-100%) translateZ(0); opacity: 0; visibility: hidden; } 
+                100% { transform: translateY(0) translateZ(0); opacity: 1; visibility: visible; } 
             }
         </style>
     <% } %>
