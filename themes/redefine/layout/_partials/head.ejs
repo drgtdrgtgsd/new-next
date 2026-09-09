@@ -120,7 +120,25 @@
 
     <% if (theme.global.preloader) { %>
         <%- renderJS('js/libs/anime.min.js')%>
-        <style id="nav-hide-style">.navbar-container { transform: translateY(-100%) !important; opacity: 0 !important; visibility: hidden !important; }</style>
+        <style id="nav-hide-style">
+            /* Use high specificity to hide the navbar initially without !important.
+               This allows the @keyframes animation to seamlessly override it without ANY Javascript intervention. */
+            html body header.navbar-container {
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+            }
+            /* Ensure the animation makes it visible */
+            html body header.navbar-container.nav-animate-in {
+                visibility: visible;
+                animation: navSlideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                will-change: transform, opacity;
+            }
+            @keyframes navSlideDown { 
+                0% { transform: translateY(-100%); opacity: 0; visibility: hidden; } 
+                100% { transform: translateY(0); opacity: 1; visibility: visible; } 
+            }
+        </style>
     <% } %>
 
     <%- export_config() %>

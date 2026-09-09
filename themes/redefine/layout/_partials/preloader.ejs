@@ -137,18 +137,8 @@
                 
                 var navbar = document.querySelector('.navbar-container');
                 if (navbar) {
-                    // Start the animation immediately. 
-                    // It won't be visible yet because nav-hide-style overrides it.
+                    // Just add the class. The CSS animation takes over smoothly because there is no !important blocking it.
                     navbar.classList.add('nav-animate-in');
-                    
-                    // Wait exactly 2 browser frames to ensure the animation has started calculating
-                    requestAnimationFrame(function() {
-                        requestAnimationFrame(function() {
-                            // Now remove the global lock. The animation smoothly takes over.
-                            var hideStyle = document.getElementById('nav-hide-style');
-                            if (hideStyle) hideStyle.remove();
-                        });
-                    });
                 }
             }, 200);
         }
