@@ -15,6 +15,9 @@
     padding-top $navbar-height
     position relative
     transition padding 0.2s ease
+    display flex
+    flex-direction column
+    min-height 100vh
 
     .navbar-shrink &
       padding-top $navbar-shrink-height
@@ -62,6 +65,7 @@
         height: $navbar-height * 0.8
 
     .main-content-body
+      flex 1
       box-sizing border-box
       width 100%
       display flex
