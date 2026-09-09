@@ -122,25 +122,25 @@
         <%- renderJS('js/libs/anime.min.js')%>
         <style id="nav-hide-style">
             /* Use high specificity to hide the navbar initially without !important.
-               This allows the @keyframes animation to seamlessly override it without ANY Javascript intervention.
-               Added translateZ(0) and backface-visibility to prevent Chromium backdrop-filter black flash bugs. */
+               Added translateZ(0) and backface-visibility to prevent Chromium backdrop-filter black flash bugs.
+               CRITICAL 1: Do NOT use opacity: 0 or visibility: hidden.
+               CRITICAL 2: Do NOT use exactly -100% for translateY, otherwise Chrome's Frustum Culling destroys 
+               the off-screen layer and re-allocates it (flashing black) when the animation starts. -99.9% intersects the viewport slightly. */
             html body header.navbar-container {
-                transform: translateY(-100%) translateZ(0);
-                opacity: 0;
-                visibility: hidden;
+                transform: translateY(-99.9%) translateZ(0);
+                opacity: 0.001;
                 will-change: transform, opacity;
                 backface-visibility: hidden;
             }
             /* Ensure the animation makes it visible */
             html body header.navbar-container.nav-animate-in {
-                visibility: visible;
                 animation: navSlideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
                 will-change: transform, opacity;
                 backface-visibility: hidden;
             }
             @keyframes navSlideDown { 
-                0% { transform: translateY(-100%) translateZ(0); opacity: 0; visibility: hidden; } 
-                100% { transform: translateY(0) translateZ(0); opacity: 1; visibility: visible; } 
+                0% { transform: translateY(-99.9%) translateZ(0); opacity: 0.001; } 
+                100% { transform: translateY(0) translateZ(0); opacity: 1; } 
             }
         </style>
     <% } %>
