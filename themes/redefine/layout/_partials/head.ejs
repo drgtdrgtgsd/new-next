@@ -120,15 +120,14 @@
 
     <% if (theme.global.preloader) { %>
         <%- renderJS('js/libs/anime.min.js')%>
+        <% if (is_home() && (!page.current || page.current === 1)) { %>
         <style id="nav-hide-style">
-            /* Use high specificity to hide the navbar initially without !important.
-               We use margin-top instead of transform to COMPLETELY bypass Chromium's GPU compositor 
-               bug with backdrop-filter. Animating margin-top forces layout rendering which never flashes black. */
+            /* Only hide navbar on the first page of home, where the preloader animates it in.
+               On all other pages the navbar should be visible immediately. */
             html body header.navbar-container {
                 margin-top: -150px;
                 opacity: 0;
             }
-            /* Ensure the animation makes it visible */
             html body header.navbar-container.nav-animate-in {
                 animation: navSlideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             }
@@ -137,6 +136,7 @@
                 100% { margin-top: 0; opacity: 1; } 
             }
         </style>
+        <% } %>
     <% } %>
 
     <%- export_config() %>
