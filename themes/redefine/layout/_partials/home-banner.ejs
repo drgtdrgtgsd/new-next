@@ -201,20 +201,13 @@
 
     <script>
         const scrollToMain = ()=> {
-            console.log('scroll');
             const target = document.querySelector('.main-content-container');
             target.scrollIntoView({ behavior: 'smooth'});
         }
         
-        // Handle X logo click
-        const xLogo = document.getElementById('custom-x-logo');
-        const phoneModal = document.getElementById('x-phone-modal');
-        const closeBtn = document.getElementById('x-phone-close');
-        let dataLoaded = false;
-        
-        const loadTwitterData = async () => {
-            if (dataLoaded) return;
-            dataLoaded = true;
+        window.loadTwitterData = async () => {
+            if (window._xLogoDataLoaded) return;
+            window._xLogoDataLoaded = true;
             try {
                 // Fetch profile JSON
                 const res = await fetch('/api/twitter/nxhs3995');
@@ -222,27 +215,37 @@
                 
                 if (json.code === 200 && json.user) {
                     const user = json.user;
-                    document.getElementById('x-native-name').textContent = user.name || "高粱NexT";
-                    document.getElementById('x-native-handle').textContent = "@" + user.screen_name;
-                    document.getElementById('x-native-bio').innerHTML = (user.description || "").replace(/\n/g, '<br>');
+                    const nameEl = document.getElementById('x-native-name');
+                    if (nameEl) nameEl.textContent = user.name || "高粱NexT";
+                    const handleEl = document.getElementById('x-native-handle');
+                    if (handleEl) handleEl.textContent = "@" + user.screen_name;
+                    const bioEl = document.getElementById('x-native-bio');
+                    if (bioEl) bioEl.innerHTML = (user.description || "").replace(/\n/g, '<br>');
                     
-                    document.getElementById('x-native-stats').innerHTML = `
-                        <div style="display: flex; gap: 15px; margin-top: 15px; font-size: 14px;">
-                            <div><strong style="color: #ffffff;">${user.following}</strong> <span style="color: #8b98a5;">Following</span></div>
-                            <div><strong style="color: #ffffff;">${user.followers}</strong> <span style="color: #8b98a5;">Followers</span></div>
-                        </div>
-                    `;
+                    const statsEl = document.getElementById('x-native-stats');
+                    if (statsEl) {
+                        statsEl.innerHTML = `
+                            <div style="display: flex; gap: 15px; margin-top: 15px; font-size: 14px;">
+                                <div><strong style="color: #ffffff;">${user.following}</strong> <span style="color: #8b98a5;">Following</span></div>
+                                <div><strong style="color: #ffffff;">${user.followers}</strong> <span style="color: #8b98a5;">Followers</span></div>
+                            </div>
+                        `;
+                    }
 
                     if (user.avatar_url) {
                         const avatarImg = document.getElementById('x-native-avatar');
-                        avatarImg.src = user.avatar_url.replace('_normal', '_400x400');
-                        avatarImg.style.display = 'block';
+                        if (avatarImg) {
+                            avatarImg.src = user.avatar_url.replace('_normal', '_400x400');
+                            avatarImg.style.display = 'block';
+                        }
                     }
                     if (user.banner_url) {
                         const bannerDiv = document.getElementById('x-native-banner');
-                        bannerDiv.style.backgroundImage = `url(${user.banner_url})`;
-                        bannerDiv.style.backgroundSize = 'cover';
-                        bannerDiv.style.backgroundPosition = 'center';
+                        if (bannerDiv) {
+                            bannerDiv.style.backgroundImage = `url(${user.banner_url})`;
+                            bannerDiv.style.backgroundSize = 'cover';
+                            bannerDiv.style.backgroundPosition = 'center';
+                        }
                     }
                 }
             } catch (err) {
@@ -250,59 +253,60 @@
             }
         };
 
-        if (xLogo && phoneModal) {
-            xLogo.addEventListener('click', (e) => {
-                e.preventDefault(); // Stop normal link opening
-                
-                // Toggle modal
-                const isActive = phoneModal.classList.contains('active');
-                const tooltip = document.getElementById('custom-x-tooltip');
-                if (!isActive) {
-                    phoneModal.classList.add('active');
-                    if (tooltip) tooltip.style.display = 'none';
-                    loadTwitterData();
-                } else {
-                    phoneModal.classList.remove('active');
-                    if (tooltip) tooltip.style.display = '';
-                }
-            });
+        if (!window._xLogoEventsAttached) {
+            window._xLogoEventsAttached = true;
             
-            if (closeBtn) {
-                closeBtn.addEventListener('click', (e) => {
+            // Global click listener (delegation)
+            document.addEventListener('click', (e) => {
+                const xLogo = e.target.closest('#custom-x-logo');
+                const closeBtn = e.target.closest('#x-phone-close');
+                const phoneModal = document.getElementById('x-phone-modal');
+                const tooltip = document.getElementById('custom-x-tooltip');
+                
+                if (xLogo && phoneModal) {
+                    e.preventDefault();
+                    const isActive = phoneModal.classList.contains('active');
+                    if (!isActive) {
+                        phoneModal.classList.add('active');
+                        if (tooltip) tooltip.style.display = 'none';
+                        window.loadTwitterData();
+                    } else {
+                        phoneModal.classList.remove('active');
+                        if (tooltip) tooltip.style.display = '';
+                    }
+                } else if (closeBtn && phoneModal) {
                     e.stopPropagation();
                     e.preventDefault();
                     phoneModal.classList.remove('active');
-                    const tooltip = document.getElementById('custom-x-tooltip');
                     if (tooltip) tooltip.style.display = '';
-                });
-            }
-            
-            // Click outside to close
-            document.addEventListener('click', (e) => {
-                if (phoneModal.classList.contains('active') && !phoneModal.contains(e.target) && !xLogo.contains(e.target)) {
+                } else if (phoneModal && phoneModal.classList.contains('active') && !e.target.closest('#x-phone-modal')) {
                     phoneModal.classList.remove('active');
-                    const tooltip = document.getElementById('custom-x-tooltip');
                     if (tooltip) tooltip.style.display = '';
                 }
             });
-        }
-        
-        // Fade out X logo and modal on scroll down
-        window.addEventListener('scroll', () => {
-            if (xLogo) {
-                if (window.scrollY > 50) {
-                    xLogo.style.opacity = '0';
-                    xLogo.style.pointerEvents = 'none';
-                    if(phoneModal) {
-                        phoneModal.style.opacity = '0';
-                        phoneModal.style.pointerEvents = 'none';
-                        phoneModal.classList.remove('active');
+            
+            // Fade out X logo and modal on scroll down
+            window.addEventListener('scroll', () => {
+                const xLogo = document.getElementById('custom-x-logo');
+                const phoneModal = document.getElementById('x-phone-modal');
+                if (xLogo) {
+                    if (window.scrollY > 50) {
+                        xLogo.style.opacity = '0';
+                        xLogo.style.pointerEvents = 'none';
+                        if(phoneModal) {
+                            phoneModal.style.opacity = '0';
+                            phoneModal.style.pointerEvents = 'none';
+                            phoneModal.classList.remove('active');
+                        }
+                    } else {
+                        xLogo.style.opacity = '1';
+                        xLogo.style.pointerEvents = 'auto';
+                        if(phoneModal) {
+                            phoneModal.style.pointerEvents = 'auto';
+                        }
                     }
-                } else {
-                    xLogo.style.opacity = '1';
-                    xLogo.style.pointerEvents = 'auto';
                 }
-            }
-        });
+            });
+        }
     </script>
 </div>

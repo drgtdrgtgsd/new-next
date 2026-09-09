@@ -1,3 +1,10 @@
+<style id="preloader-hide-navbar">
+    /* Hide the navbar while the preloader is running. It will be removed in JS. */
+    .navbar-container {
+        margin-top: -150px !important;
+        opacity: 0 !important;
+    }
+</style>
 <style>
     :root {
         --preloader-background-color: #fff;
@@ -135,8 +142,21 @@
             setTimeout(function () {
                 preloader.style.display = 'none';
                 
+                var hideStyle = document.getElementById('preloader-hide-navbar');
+                if (hideStyle) {
+                    hideStyle.remove();
+                }
+                
                 var navbar = document.querySelector('.navbar-container');
                 if (navbar) {
+                    // Set initial state explicitly just in case before animating
+                    navbar.style.marginTop = '-150px';
+                    navbar.style.opacity = '0';
+                    navbar.style.transition = 'none';
+                    
+                    // Force reflow
+                    void navbar.offsetWidth;
+                    
                     // Animate the navbar sliding down after preloader finishes
                     navbar.style.transition = 'margin-top 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
                     navbar.style.marginTop = '0';
