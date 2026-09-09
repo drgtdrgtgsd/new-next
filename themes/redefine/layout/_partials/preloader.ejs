@@ -134,6 +134,9 @@
             preloader.style.opacity = '0';
             setTimeout(function () {
                 preloader.style.display = 'none';
+                // Trigger navbar slide-down animation after preloader is gone
+                var navbar = document.querySelector('.navbar-container');
+                if (navbar) navbar.classList.add('nav-animate-in');
             }, 200);
         }
     </script>
