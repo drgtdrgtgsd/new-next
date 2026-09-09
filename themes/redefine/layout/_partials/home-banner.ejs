@@ -206,8 +206,6 @@
         }
         
         window.loadTwitterData = async () => {
-            if (window._xLogoDataLoaded) return;
-            
             const renderUser = (user) => {
                 const nameEl = document.getElementById('x-native-name');
                 if (nameEl) nameEl.textContent = user.name || "高粱NexT";
@@ -252,14 +250,14 @@
                         // 1 hour expiry (3600000 ms)
                         if (Date.now() - cache.timestamp < 3600000) {
                             renderUser(cache.data);
-                            window._xLogoDataLoaded = true;
-                            // Optionally still fetch in background to update cache, but we don't strictly need to
                             return; 
                         }
                     } catch (e) {}
                 }
 
-                window._xLogoDataLoaded = true;
+                if (window._xLogoDataFetching) return;
+                window._xLogoDataFetching = true;
+
                 // Fetch profile JSON
                 const res = await fetch('/api/twitter/nxhs3995');
                 const json = await res.json();
@@ -272,8 +270,10 @@
                     }));
                     renderUser(json.user);
                 }
+                window._xLogoDataFetching = false;
             } catch (err) {
                 console.error(err);
+                window._xLogoDataFetching = false;
             }
         };
 
