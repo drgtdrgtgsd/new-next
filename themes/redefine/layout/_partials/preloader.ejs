@@ -1,3 +1,4 @@
+<style id="nav-hide-style">.navbar-container { opacity: 0 !important; transform: translateY(-100%) !important; }</style>
 <style>
     :root {
         --preloader-background-color: #fff;
@@ -86,12 +87,6 @@
             textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
         });
 
-        // Wait for DOM to be ready, then hide navbar (it doesn't exist yet at this point)
-        document.addEventListener('DOMContentLoaded', function() {
-            var navbar = document.querySelector('.navbar-container');
-            if (navbar) navbar.classList.add('nav-hidden');
-        });
-
         var animation = anime.timeline({loop: false})
             .add({
                 targets: '.ml13 .letter',
@@ -138,12 +133,11 @@
             preloader.style.opacity = '0';
             setTimeout(function () {
                 preloader.style.display = 'none';
-                // Now trigger navbar slide-down animation
+                // Remove the CSS that hides navbar, then trigger slide-down animation
+                var hideStyle = document.getElementById('nav-hide-style');
+                if (hideStyle) hideStyle.remove();
                 var navbar = document.querySelector('.navbar-container');
-                if (navbar) {
-                    navbar.classList.remove('nav-hidden');
-                    navbar.classList.add('nav-animate-in');
-                }
+                if (navbar) navbar.classList.add('nav-animate-in');
             }, 200);
         }
     </script>
