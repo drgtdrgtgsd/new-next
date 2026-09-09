@@ -4,30 +4,40 @@ export default {
 
     if (url.pathname.startsWith("/api/twitter/")) {
       const username = url.pathname.split("/").pop();
-      const instances = [
-        `https://nitter.poast.org/${username}/rss`,
-        `https://nitter.privacydev.net/${username}/rss`,
-        `https://xcancel.com/${username}/rss`
-      ];
-      
-      let xmlText = "";
-      for (const instance of instances) {
-        try {
-          const response = await fetch(instance, {
-            headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
-          });
-          if (response.ok) {
-            xmlText = await response.text();
-            break;
-          }
-        } catch (e) {
-          continue;
+      try {
+        const response = await fetch(`https://api.fxtwitter.com/${username}`, {
+          headers: { 'User-Agent': 'Mozilla/5.0' }
+        });
+        const data = await response.json();
+        
+        // Rewrite image URLs to go through our proxy
+        if (data.user) {
+           if (data.user.avatar_url) {
+              data.user.avatar_url = data.user.avatar_url.replace('https://pbs.twimg.com/', '/api/twimg/');
+           }
+           if (data.user.banner_url) {
+              data.user.banner_url = data.user.banner_url.replace('https://pbs.twimg.com/', '/api/twimg/');
+           }
         }
+        
+        return new Response(JSON.stringify(data), {
+          headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+        });
+      } catch (e) {
+        return new Response(JSON.stringify({error: e.toString()}), {status: 500});
       }
-      
-      return new Response(xmlText || '<error>Failed to fetch RSS</error>', {
-        headers: { 'Content-Type': 'application/xml', 'Access-Control-Allow-Origin': '*' }
-      });
+    }
+    
+    if (url.pathname.startsWith("/api/twimg/")) {
+        const targetUrl = url.pathname.replace("/api/twimg/", "https://pbs.twimg.com/");
+        const response = await fetch(targetUrl);
+        return new Response(response.body, {
+           headers: {
+              'Content-Type': response.headers.get('Content-Type'),
+              'Cache-Control': 'public, max-age=86400',
+              'Access-Control-Allow-Origin': '*'
+           }
+        });
     }
 
     return env.ASSETS.fetch(request);

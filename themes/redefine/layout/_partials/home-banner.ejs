@@ -152,7 +152,7 @@
     <div id="x-phone-modal" style="position: absolute; bottom: 100px; right: 40px; width: 360px; height: 600px; background: #ffffff; border-radius: 36px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,0,0,0.05); z-index: 30; overflow: hidden; border: 8px solid #111; transform: translateY(40px) scale(0.95); opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: bottom right; display: flex; flex-direction: column;">
         
         <!-- Header / Banner -->
-        <div style="height: 120px; background: #1da1f2; position: relative; flex-shrink: 0;">
+        <div id="x-native-banner" style="height: 120px; background: #1da1f2; position: relative; flex-shrink: 0;">
             <div id="x-native-avatar-container" style="position: absolute; bottom: -35px; left: 15px; width: 70px; height: 70px; border-radius: 50%; border: 4px solid #fff; background: #eee; overflow: hidden;">
                 <img id="x-native-avatar" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;">
             </div>
@@ -209,73 +209,54 @@
             if (dataLoaded) return;
             dataLoaded = true;
             try {
-                // Fetch from our Worker API proxy
+                // Fetch from our Worker API proxy (returns JSON from fxtwitter)
                 const res = await fetch('/api/twitter/nxhs3995');
-                const text = await res.text();
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(text, "text/xml");
+                const json = await res.json();
                 
-                const title = xmlDoc.querySelector("channel > title")?.textContent || "高粱NexT";
-                const desc = xmlDoc.querySelector("channel > description")?.textContent || "";
-                const image = xmlDoc.querySelector("channel > image > url")?.textContent;
+                if (json.code !== 200 || !json.user) {
+                    throw new Error("Failed to load user data");
+                }
                 
-                document.getElementById('x-native-name').textContent = title.replace(/ \/ nitter/i, '');
-                document.getElementById('x-native-bio').textContent = desc;
-                if (image) {
+                const user = json.user;
+                
+                // Update text
+                document.getElementById('x-native-name').textContent = user.name || "高粱NexT";
+                document.getElementById('x-native-handle').textContent = "@" + user.screen_name;
+                
+                // Set Bio and handle newlines
+                const bioEl = document.getElementById('x-native-bio');
+                bioEl.innerHTML = (user.description || "").replace(/\n/g, '<br>');
+                
+                // Stats block
+                const statsHtml = `
+                    <div style="display: flex; gap: 15px; margin-top: 15px; font-size: 14px;">
+                        <div><strong style="color: #0f1419;">${user.following}</strong> <span style="color: #536471;">Following</span></div>
+                        <div><strong style="color: #0f1419;">${user.followers}</strong> <span style="color: #536471;">Followers</span></div>
+                    </div>
+                `;
+                bioEl.insertAdjacentHTML('afterend', statsHtml);
+
+                // Update images
+                if (user.avatar_url) {
                     const avatarImg = document.getElementById('x-native-avatar');
-                    avatarImg.src = image;
+                    avatarImg.src = user.avatar_url.replace('_normal', '_400x400');
                     avatarImg.style.display = 'block';
                 }
                 
-                const items = xmlDoc.querySelectorAll("item");
-                const tweetsContainer = document.getElementById('x-native-tweets');
-                tweetsContainer.innerHTML = "";
-                
-                items.forEach((item, index) => {
-                    if (index > 10) return; // Limit to 10 tweets
-                    let pubDate = item.querySelector("pubDate")?.textContent || "";
-                    let content = item.querySelector("description")?.textContent || "";
-                    
-                    // Simple formatting of the tweet HTML
-                    // Nitter RSS puts the full tweet HTML in description
-                    
-                    const tweetDiv = document.createElement("div");
-                    tweetDiv.style.padding = "15px";
-                    tweetDiv.style.borderBottom = "1px solid #eff3f4";
-                    tweetDiv.style.fontSize = "14px";
-                    tweetDiv.style.color = "#0f1419";
-                    tweetDiv.style.lineHeight = "1.5";
-                    
-                    const dateDiv = document.createElement("div");
-                    dateDiv.style.fontSize = "13px";
-                    dateDiv.style.color = "#536471";
-                    dateDiv.style.marginBottom = "8px";
-                    try {
-                        const d = new Date(pubDate);
-                        dateDiv.textContent = d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
-                    } catch(e) {
-                        dateDiv.textContent = pubDate;
+                if (user.banner_url) {
+                    const bannerDiv = document.getElementById('x-native-banner');
+                    if(bannerDiv) {
+                        bannerDiv.style.backgroundImage = `url(${user.banner_url})`;
+                        bannerDiv.style.backgroundSize = 'cover';
+                        bannerDiv.style.backgroundPosition = 'center';
                     }
-                    
-                    const contentDiv = document.createElement("div");
-                    contentDiv.innerHTML = content;
-                    
-                    // Style images inside tweet
-                    const imgs = contentDiv.querySelectorAll("img");
-                    imgs.forEach(img => {
-                        img.style.maxWidth = "100%";
-                        img.style.height = "auto";
-                        img.style.borderRadius = "12px";
-                        img.style.marginTop = "10px";
-                    });
-                    
-                    tweetDiv.appendChild(dateDiv);
-                    tweetDiv.appendChild(contentDiv);
-                    tweetsContainer.appendChild(tweetDiv);
-                });
+                }
+                
+                // Hide loading spinner in tweets area
+                document.getElementById('x-native-tweets').innerHTML = '';
             } catch (err) {
                 console.error(err);
-                document.getElementById('x-native-tweets').innerHTML = '<div style="padding: 20px; text-align: center; color: #536471;">Failed to load tweets.</div>';
+                document.getElementById('x-native-tweets').innerHTML = '<div style="padding: 20px; text-align: center; color: #536471;">Failed to load profile.</div>';
             }
         };
 
